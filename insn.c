@@ -351,10 +351,6 @@ void CMPSQ(void)
 {
 }
 
-void CMPSD(void)
-{
-}
-
 void CMPSS(void)
 {
 }
@@ -1187,7 +1183,7 @@ void MOVNTQ(void)
 {
 }
 
-void MOVQ(void)
+void MOVQ2(void)
 {
 }
 
@@ -1215,7 +1211,7 @@ void MOVSQ(void)
 {
 }
 
-void MOVSD (void)
+void MOVSD2 (void)
 {
 }
 

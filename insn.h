@@ -281,7 +281,7 @@ void MOVNTI(void);
 void MOVNTPD(void);
 void MOVNTPS(void);
 void MOVNTQ(void);
-void MOVQ(void);
+void MOVQ2(void);
 void MOVQ2DQ(void);
 void MOVS(void);
 void MOVSB(void);
@@ -289,7 +289,7 @@ void MOVSW(void);
 void MOVSD(void);
 void MOVSQ(void);
 // ambiguous ???
-void MOVSD (void);
+void MOVSD2 (void);
 void MOVSHDUP(void);
 void MOVSLDUP(void);
 void MOVSS(void);

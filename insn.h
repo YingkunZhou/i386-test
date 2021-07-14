@@ -1,19 +1,19 @@
 /* https://nptel.ac.in/content/storage2/courses/106108100/pdf/Teacher_Slides/mod2/M2L1.pdf */
 /* https://en.wikipedia.org/wiki/X86_instruction_listings */
 #define AAA_ "aaa \n\t"
-void AAA(void); //ori
+void AAA(void); //original
 #define AAD_ "aad \n\t"
 #define AADi(IMM) "aad " #IMM "\n\t"
-void AAD(void); //ori
+void AAD(void); //original
 #define AAM_ "aad \n\t"
 #define AAMi(IMM) "aad " #IMM "\n\t"
-void AAM(void); //ori
+void AAM(void); //original
 #define AAS_ "aas \n\t"
-void AAS(void); //ori
+void AAS(void); //original
 #define ADC_(OPN1, OPN2) "adc " #OPN1 "," #OPN2 "\n\t"
-void ADC(void); //ori
+void ADC(void); //original
 #define ADD_(OPN1, OPN2) "add " #OPN1 "," #OPN2 "\n\t"
-void ADD(void); //ori
+void ADD(void); //original
 #define ADDPD_(OPN1, OPN2) "addpd " #OPN1 ",%" #OPN2 "\n\t"
 void ADDPD(void); //SSE2 packed arithmetic instructions
 #define ADDPS_(OPN1, OPN2) "addps " #OPN1 ",%" #OPN2 "\n\t"
@@ -22,37 +22,36 @@ void ADDPS(void); //SSE2 packed arithmetic instructions
 void ADDSD(void); //SSE2 packed arithmetic instructions
 #define ADDSS_(OPN1, OPN2) "addss " #OPN1 ",%" #OPN2 "\n\t"
 void ADDSS(void); //SSE2 packed arithmetic instructions
+#define ADDSUBPD_(OPN1, OPN2) "addsubpd " #OPN1 ",%" #OPN2 "\n\t"
 void ADDSUBPD(void); //SSE3 SIMD floating-point instructions
+#define ADDSUBPS_(OPN1, OPN2) "addsubps " #OPN1 ",%" #OPN2 "\n\t"
 void ADDSUBPS(void); //SSE3 SIMD floating-point instructions
-void ADOX(void); //Added with Intel ADX
-void AND(void); //ori
-void ANDN(void); //Added with BMI1
+#define AND_(OPN1, OPN2) "and " #OPN1 "," #OPN2 "\n\t"
+void AND(void); //original
+#define ANDPD_(OPN1, OPN2) "andpd " #OPN1 ",%" #OPN2 "\n\t"
 void ANDPD(void); //SSE2 logical instructions
+#define ANDPS_(OPN1, OPN2) "andps " #OPN1 ",%" #OPN2 "\n\t"
 void ANDPS(void); //SSE instructions
+#define ANDNPD_(OPN1, OPN2) "andnpd " #OPN1 ",%" #OPN2 "\n\t"
 void ANDNPD(void); //SSE2 logical instructions
-void ANDNPS(void);
-void ARPL(void);
+#define ANDNPS_(OPN1, OPN2) "andnps " #OPN1 ",%" #OPN2 "\n\t"
+void ANDNPS(void); //SSE instructions
+#define ARPL_(OPN1, OPN2) "arpl " #OPN1 ",%" #OPN2 "\n\t"
+void ARPL(void); //Added with 80286
 // what about prefix
-void BEXTR(void);
-void BLENDPD(void);
-void BLENDPS(void);
-void BLENDVPD(void);
-void BLENDVPS(void);
-void BLSI(void);
-void BLSMSK(void);
-void BLSR(void);
-void BNDCL(void);
-void BNDCU(void);
-void BNDCN(void);
-void BNDLDX(void);
-void BNDMK(void);
-void BNDMOV(void);
-void BNDSTX(void);
-void BOUND(void);
-void BSF(void);
-void BSR(void);
-void BSWAP(void);
-void BT(void);
+#define BLENDPD_(IMM, OPN1, OPN2) "blendpd " #IMM "," #OPN1 ",%" #OPN2 "\n\t"
+void BLENDPD(void); //SSE4.1 SIMD floating-point instructions
+#define BLENDPS_(IMM, OPN1, OPN2) "blendps " #IMM "," #OPN1 ",%" #OPN2 "\n\t"
+void BLENDPS(void); //SSE4.1 SIMD floating-point instructions
+#define BLENDVPD_(IMM, OPN1, OPN2) "blendvpd %" #IMM "," #OPN1 ",%" #OPN2 "\n\t"
+void BLENDVPD(void); //SSE4.1 SIMD floating-point instructions
+#define BLENDVPS_(IMM, OPN1, OPN2) "blendvps %" #IMM "," #OPN1 ",%" #OPN2 "\n\t"
+void BLENDVPS(void); //SSE4.1 SIMD floating-point instructions
+void BOUND(void); //Added with 80186/80188
+void BSF(void); //Added with 80386
+void BSR(void); //Added with 80386
+void BSWAP(void); //Added with 80486
+void BT(void); //Added with 80386
 void BTC(void);
 void BTR(void);
 void BTS(void);

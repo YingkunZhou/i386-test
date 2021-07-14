@@ -6,6 +6,13 @@ float bs[4] __attribute__ ((aligned (16))) = {1.0f, 3.0f, 5.0f, 7.0f};
 double ad[2] __attribute__ ((aligned (16))) = {2.0, 4.0};
 double bd[2] __attribute__ ((aligned (16))) = {1.0, 3.0};
 
+unsigned long axmm[4] __attribute__ ((aligned (16))) = {
+0x80000000,
+0x00000000,
+0x00000000,
+0x80000000,
+};
+
 /* http://www.c-jump.com/CIS77/CIS77syllabus.htm */
 void AAA(void)
 {
@@ -66,12 +73,41 @@ void AAS(void)
 
 void ADC(void)
 {
+  __asm__ __volatile__(
+      MOV_($0, %%dl)
+      MOV_($0xff, %%al)
+      ADD_($0xff, %%al)
+      ADC_($0, %%dl)
+      :::"al", "dl");
+  __asm__ __volatile__(
+      MOV_($0, %%edx)
+      MOV_($0xffffffff, %%eax)
+      ADD_($0xffffffff, %%eax)
+      ADC_($0, %%edx)
+      :::"eax", "edx");
+  /* EBX:EAX = EBX:EAX + EDX:ECX */
+  __asm__ __volatile__(
+      MOV_($1234, %%eax)
+      MOV_($5678, %%ebx)
+      MOV_($1111, %%ecx)
+      MOV_($2222, %%edx)
+      ADD_(%%ecx, %%eax)
+      ADC_(%%edx, %%ebx)
+      :::"eax", "edx");
 }
 
 /* https://github.com/weidai11/cryptopp/issues/463 */
 /* https://www.intel.com/content/dam/www/public/us/en/documents/white-papers/ia-large-integer-arithmetic-paper.pdf */
 void ADCX(void)
 {
+}
+
+void ADD(void)
+{
+  __asm__ __volatile__(
+      MOV_($78, %%al)
+      ADD_($74, %%al)
+      :::"al");
 }
 
 /* ADDPD xmm1, xmm2/m128
@@ -130,10 +166,20 @@ void ADDSS(void)
 
 void ADDSUBPD(void)
 {
+  __asm__ __volatile__(
+      MOVAPD_(ad, %%xmm0)
+      ADDSUBPD_(bd, %xmm0)
+      MOVAPD_(%%xmm0, ad)
+      :::"xmm0");
 }
 
 void ADDSUBPS(void)
 {
+  __asm__ __volatile__(
+      MOVAPS_(as, %%xmm0)
+      ADDSUBPS_(bs, %xmm0)
+      MOVAPS_(%%xmm0, as)
+      :::"xmm0");
 }
 
 void ADOX(void)
@@ -142,6 +188,10 @@ void ADOX(void)
 
 void AND(void)
 {
+  __asm__ __volatile__(
+      MOV_($0xffffffff, %%eax)
+      AND_($0xf, %%eax)
+      :::"eax", "edx");
 }
 
 void ANDN(void)
@@ -150,18 +200,38 @@ void ANDN(void)
 
 void ANDPD(void)
 {
+  __asm__ __volatile__(
+      MOVAPD_(ad, %%xmm0)
+      ANDPD_(bd, %xmm0)
+      MOVAPD_(%%xmm0, ad)
+      :::"xmm0");
 }
 
 void ANDPS(void)
 {
+  __asm__ __volatile__(
+      MOVAPS_(as, %%xmm0)
+      ANDPS_(bs, %xmm0)
+      MOVAPS_(%%xmm0, as)
+      :::"xmm0");
 }
 
 void ANDNPD(void)
 {
+  __asm__ __volatile__(
+      MOVAPD_(ad, %%xmm0)
+      ANDNPD_(bd, %xmm0)
+      MOVAPD_(%%xmm0, ad)
+      :::"xmm0");
 }
 
 void ANDNPS(void)
 {
+  __asm__ __volatile__(
+      MOVAPS_(as, %%xmm0)
+      ANDNPS_(bs, %xmm0)
+      MOVAPS_(%%xmm0, as)
+      :::"xmm0");
 }
 
 /* The ARPL instruction is provided for use by operating-system procedures (however, it can also be used by applica-
@@ -170,6 +240,9 @@ void ANDNPS(void)
  */
 void ARPL(void)
 {
+  __asm__ __volatile__(
+      ARPL_(%%cx, %bx)
+      :::"bx");
 }
 
 void BEXTR(void)
@@ -178,18 +251,38 @@ void BEXTR(void)
 
 void BLENDPD(void)
 {
+  __asm__ __volatile__(
+      MOVAPD_(ad, %%xmm0)
+      BLENDPD_($5, %%xmm0, %xmm1)
+      :::"xmm0", "xmm1");
 }
 
 void BLENDPS(void)
 {
+  __asm__ __volatile__(
+      MOVAPS_(as, %%xmm0)
+      BLENDPS_($5, %%xmm0, %xmm1)
+      :::"xmm0", "xmm1");
 }
 
 void BLENDVPD(void)
 {
+  __asm__ __volatile__(
+      MOVAPD_(axmm, %%xmm0)
+      MOVAPD_(ad, %%xmm1)
+      MOVAPD_(bd, %%xmm2)
+      BLENDVPD_(%xmm0, %%xmm1, %xmm2)
+      :::"xmm0", "xmm1", "xmm2");
 }
 
 void BLENDVPS(void)
 {
+  __asm__ __volatile__(
+      MOVAPS_(axmm, %%xmm0)
+      MOVAPS_(as, %%xmm1)
+      MOVAPS_(bs, %%xmm2)
+      BLENDVPS_(%xmm0, %%xmm1, %xmm2)
+      :::"xmm0", "xmm1", "xmm2");
 }
 
 void BLSI(void)

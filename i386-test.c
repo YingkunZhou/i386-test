@@ -30,5 +30,8 @@ void test()
   ADDPS();
   ADDSD();
   ADDSS();
+  ADDSUBPD();
+  ARPL();
+  BLENDVPD();
   finish();
 }

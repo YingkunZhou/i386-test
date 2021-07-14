@@ -6,9 +6,10 @@ float bs[4] = {1.0f, 3.0f, 5.0f, 7.0f};
 double ad[2] = {2.0, 4.0};
 double bd[2] = {1.0, 3.0};
 
+/* http://www.c-jump.com/CIS77/CIS77syllabus.htm */
 void AAA(void)
 {
-  asm volatile(
+  __asm__ __volatile__(
       ItoR(mov, $0, %ah)
       ItoR(mov, $6, %al)
       "add $5, %al \n\t"
@@ -18,11 +19,11 @@ void AAA(void)
 
 void AAD(void)
 {
-  asm volatile(
+  __asm__ __volatile__(
       ItoR(mov, $0x0205, %ax)
       "aad \n\t"
       );
-  asm volatile(
+  __asm__ __volatile__(
       ItoR(mov, $0x0607, %ax)
       ItoR(mov, $9, %ch)
       "aad \n\t"
@@ -32,7 +33,7 @@ void AAD(void)
 
 void AAM(void)
 {
-  asm volatile(
+  __asm__ __volatile__(
       ItoR(mov, $5, %al)
       ItoR(mov, $7, %al)
       "mul %bl \n\t"
@@ -42,19 +43,19 @@ void AAM(void)
 
 void AAS(void)
 {
-  asm volatile(
+  __asm__ __volatile__(
       ItoR(mov, $0x0901, %ax)
       ItoR(sub, $9, %al)
       "aas \n\t"
       );
-  asm volatile(
+  __asm__ __volatile__(
       ItoR(mov, $0x39, %al)
       ItoR(mov, $0x35, %bl)
       "sub %bl, %al \n\t"
       "aas \n\t"
       );
   /* ;AL=00000100 =BCD  04;CF = 0 NO Borrow required */
-  asm volatile(
+  __asm__ __volatile__(
       ItoR(mov, $0x35, %al)
       ItoR(mov, $0x39, %bl)
       "sub %bl, %al \n\t"
@@ -79,7 +80,7 @@ void ADCX(void)
  */
 void ADDPD(void)
 {
-  asm volatile(
+  __asm__ __volatile__(
       "movapd	ad, %xmm0 \n\t"
       "addpd	bd, %xmm0 \n\t"
       "movapd	%xmm0, ad \n\t"
@@ -94,7 +95,7 @@ void ADDPD(void)
  */
 void ADDPS(void)
 {
-  asm volatile(
+  __asm__ __volatile__(
       "movaps	as, %xmm0 \n\t"
       "addps	bs, %xmm0 \n\t"
       "movaps	%xmm0, as \n\t"
@@ -107,7 +108,7 @@ void ADDPS(void)
  */
 void ADDSD(void)
 {
-  asm volatile(
+  __asm__ __volatile__(
       "movapd	ad, %xmm0 \n\t"
       "addsd	bd, %xmm0 \n\t"
       "movapd	%xmm0, ad \n\t"
@@ -120,7 +121,7 @@ void ADDSD(void)
  */
 void ADDSS(void)
 {
-  asm volatile(
+  __asm__ __volatile__(
       "movaps	as, %xmm0 \n\t"
       "addss	bs, %xmm0 \n\t"
       "movaps	%xmm0, as \n\t"

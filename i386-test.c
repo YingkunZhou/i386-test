@@ -3,7 +3,7 @@ char *str = "hello\n";
 
 static inline void print(void)
 {
-  __asm__ volatile(
+  __asm__ __volatile__(
       "movl $6, %%edx \n\t"
       "movl %0, %%ecx \n\t"
       "movl $1, %%ebx \n\t"
@@ -14,7 +14,8 @@ static inline void print(void)
 
 static inline void finish(void)
 {
-  __asm__ volatile("movl $42, %ebx \n\t"
+  __asm__ __volatile__(
+      "movl $42, %ebx \n\t"
       "movl $1, %eax \n\t"
       "int $0x80 \n\t");
 }

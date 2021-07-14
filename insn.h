@@ -1,15 +1,26 @@
 /* https://nptel.ac.in/content/storage2/courses/106108100/pdf/Teacher_Slides/mod2/M2L1.pdf */
 /* https://en.wikipedia.org/wiki/X86_instruction_listings */
+#define AAA_ "aaa \n\t"
 void AAA(void); //ori
+#define AAD_ "aad \n\t"
+#define AADi(IMM) "aad " #IMM "\n\t"
 void AAD(void); //ori
+#define AAM_ "aad \n\t"
+#define AAMi(IMM) "aad " #IMM "\n\t"
 void AAM(void); //ori
+#define AAS_ "aas \n\t"
 void AAS(void); //ori
 void ADC(void); //ori
 void ADCX(void); //Added with Intel ADX
+#define ADD_(OPN1, OPN2) "add " #OPN1 "," #OPN2 "\n\t"
 void ADD(void); //ori
+#define ADDPD_(OPN1, OPN2) "addpd " #OPN1 ",%" #OPN2 "\n\t"
 void ADDPD(void); //SSE2 packed arithmetic instructions
+#define ADDPS_(OPN1, OPN2) "addps " #OPN1 ",%" #OPN2 "\n\t"
 void ADDPS(void); //SSE2 packed arithmetic instructions
+#define ADDSD_(OPN1, OPN2) "addsd " #OPN1 ",%" #OPN2 "\n\t"
 void ADDSD(void); //SSE2 packed arithmetic instructions
+#define ADDSS_(OPN1, OPN2) "addss " #OPN1 ",%" #OPN2 "\n\t"
 void ADDSS(void); //SSE2 packed arithmetic instructions
 void ADDSUBPD(void); //SSE3 SIMD floating-point instructions
 void ADDSUBPS(void); //SSE3 SIMD floating-point instructions
@@ -104,6 +115,7 @@ void CDQ(void);
 void CQO(void);
 void DAA(void);
 void DAS(void);
+#define DIV_(OPN1) "div " #OPN1 "\n\t"
 void DEC(void);
 void DIV(void);
 void DIVPS(void);
@@ -257,8 +269,11 @@ void MINPD(void);
 void MINPS(void);
 void MINSD(void);
 void MINSS(void);
+#define MOV_(OPN1, OPN2) "mov " #OPN1 "," #OPN2 " \n\t"
 void MOV(void);
+#define MOVAPD_(OPN1, OPN2) "movapd " #OPN1 "," #OPN2 "\n\t"
 void MOVAPD(void);
+#define MOVAPS_(OPN1, OPN2) "movaps " #OPN1 "," #OPN2 "\n\t"
 void MOVAPS(void);
 void MOVBE(void);
 void MOVD(void);
@@ -299,6 +314,7 @@ void MOVUPD(void);
 void MOVUPS(void);
 void MOVZX(void);
 void MPSADBW(void);
+#define MUL_(OPN1) "mul " #OPN1 "\n\t"
 void MUL(void);
 void MULPD(void);
 void MULPS(void);
@@ -504,6 +520,7 @@ void STOSB(void);
 void STOSW(void);
 void STOSD(void);
 void STR(void);
+#define SUB_(OPN1, OPN2) "sub " #OPN1 "," #OPN2 " \n\t"
 void SUB(void);
 void SUBPD(void);
 void SUBPS(void);

@@ -1,66 +1,66 @@
-#define ItoR(INSN, NUM, REG) #INSN" "#NUM", "#REG" \n\t"
+#include "insn.h"
 
-float as[4] = {2.0f, 4.0f, 6.0f, 8.0f};
-float bs[4] = {1.0f, 3.0f, 5.0f, 7.0f};
+float as[4] __attribute__ ((aligned (16))) = {2.0f, 4.0f, 6.0f, 8.0f};
+float bs[4] __attribute__ ((aligned (16))) = {1.0f, 3.0f, 5.0f, 7.0f};
 
-double ad[2] = {2.0, 4.0};
-double bd[2] = {1.0, 3.0};
+double ad[2] __attribute__ ((aligned (16))) = {2.0, 4.0};
+double bd[2] __attribute__ ((aligned (16))) = {1.0, 3.0};
 
 /* http://www.c-jump.com/CIS77/CIS77syllabus.htm */
 void AAA(void)
 {
   __asm__ __volatile__(
-      ItoR(mov, $0, %ah)
-      ItoR(mov, $6, %al)
-      "add $5, %al \n\t"
-      "aaa \n\t"
-      );
+      MOV_($0, %%ah)
+      MOV_($6, %%al)
+      ADD_($5, %%al)
+      AAA_
+      :::"ax");
 }
 
 void AAD(void)
 {
   __asm__ __volatile__(
-      ItoR(mov, $0x0205, %ax)
-      "aad \n\t"
-      );
+      MOV_($0x0205, %%ax)
+      AAD_
+      :::"ax");
   __asm__ __volatile__(
-      ItoR(mov, $0x0607, %ax)
-      ItoR(mov, $9, %ch)
-      "aad \n\t"
-      "div %ch \n\t"
-      );
+      MOV_($0x0607, %%ax)
+      MOV_($9, %%ch)
+      AAD_
+      DIV_(%%ch)
+      :::"ch","ax");
 }
 
 void AAM(void)
 {
   __asm__ __volatile__(
-      ItoR(mov, $5, %al)
-      ItoR(mov, $7, %al)
-      "mul %bl \n\t"
-      "aam \n\t"
-      );
+      MOV_($5, %%al)
+      MOV_($7, %%al)
+      MUL_(%%bl)
+      AAM_
+      :::"bl","al");
 }
 
 void AAS(void)
 {
   __asm__ __volatile__(
-      ItoR(mov, $0x0901, %ax)
-      ItoR(sub, $9, %al)
+      MOV_($0x0901, %%ax)
+      SUB_($9, %%al)
       "aas \n\t"
-      );
+      :::"ax");
   __asm__ __volatile__(
-      ItoR(mov, $0x39, %al)
-      ItoR(mov, $0x35, %bl)
-      "sub %bl, %al \n\t"
-      "aas \n\t"
-      );
+      MOV_($0x39, %%al)
+      MOV_($0x35, %%bl)
+      SUB_(%%bl, %%al)
+      AAS_
+      :::"bl","al");
   /* ;AL=00000100 =BCD  04;CF = 0 NO Borrow required */
   __asm__ __volatile__(
-      ItoR(mov, $0x35, %al)
-      ItoR(mov, $0x39, %bl)
-      "sub %bl, %al \n\t"
-      "aas \n\t"
-      );
+      MOV_($0x35, %%al)
+      MOV_($0x39, %%bl)
+      SUB_(%%bl, %%al)
+      AAS_
+      :::"bl","al");
   /* ;AL=00000100 =BCD  04;CF = 1 NO Borrow required */
 }
 
@@ -81,10 +81,10 @@ void ADCX(void)
 void ADDPD(void)
 {
   __asm__ __volatile__(
-      "movapd	ad, %xmm0 \n\t"
-      "addpd	bd, %xmm0 \n\t"
-      "movapd	%xmm0, ad \n\t"
-     );
+      MOVAPD_(ad, %%xmm0)
+      ADDPD_(bd, %xmm0)
+      MOVAPD_(%%xmm0, ad)
+      :::"xmm0");
 }
 
 /* ADDPS xmm1, xmm2/m128
@@ -96,10 +96,10 @@ void ADDPD(void)
 void ADDPS(void)
 {
   __asm__ __volatile__(
-      "movaps	as, %xmm0 \n\t"
-      "addps	bs, %xmm0 \n\t"
-      "movaps	%xmm0, as \n\t"
-     );
+      MOVAPS_(as, %%xmm0)
+      ADDPS_(bs, %xmm0)
+      MOVAPS_(%%xmm0, as)
+      :::"xmm0");
 }
 
 /* ADDSD xmm1, xmm2/m64
@@ -109,10 +109,10 @@ void ADDPS(void)
 void ADDSD(void)
 {
   __asm__ __volatile__(
-      "movapd	ad, %xmm0 \n\t"
-      "addsd	bd, %xmm0 \n\t"
-      "movapd	%xmm0, ad \n\t"
-     );
+      MOVAPD_(ad, %%xmm0)
+      ADDSD_(bd, %xmm0)
+      MOVAPD_(%%xmm0, ad)
+      :::"xmm0");
 }
 
 /* ADDSS xmm1, xmm2/m32
@@ -122,10 +122,10 @@ void ADDSD(void)
 void ADDSS(void)
 {
   __asm__ __volatile__(
-      "movaps	as, %xmm0 \n\t"
-      "addss	bs, %xmm0 \n\t"
-      "movaps	%xmm0, as \n\t"
-     );
+      MOVAPS_(as, %%xmm0)
+      ADDSS_(bs, %xmm0)
+      MOVAPS_(%%xmm0, as)
+      :::"xmm0");
 }
 
 void ADDSUBPD(void)

@@ -10,8 +10,8 @@ void AAD(void); //ori
 void AAM(void); //ori
 #define AAS_ "aas \n\t"
 void AAS(void); //ori
+#define ADC_(OPN1, OPN2) "adc " #OPN1 "," #OPN2 "\n\t"
 void ADC(void); //ori
-void ADCX(void); //Added with Intel ADX
 #define ADD_(OPN1, OPN2) "add " #OPN1 "," #OPN2 "\n\t"
 void ADD(void); //ori
 #define ADDPD_(OPN1, OPN2) "addpd " #OPN1 ",%" #OPN2 "\n\t"

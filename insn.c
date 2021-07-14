@@ -46,7 +46,7 @@ void AAS(void)
   __asm__ __volatile__(
       MOV_($0x0901, %%ax)
       SUB_($9, %%al)
-      "aas \n\t"
+      AAS_
       :::"ax");
   __asm__ __volatile__(
       MOV_($0x39, %%al)

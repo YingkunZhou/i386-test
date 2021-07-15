@@ -1,0 +1,2332 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+    <head>
+        <title>Encoding Real x86 Instructions</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta http-equiv="Expires" content="Wed, 31 Jan 2007 23:59:59 GMT" />
+    </head>
+    <body>
+    <p>
+        CIS-77 Home
+        <a href="http://www.c-jump.com/CIS77/CIS77syllabus.htm"><tt>http://www.c-jump.com/CIS77/CIS77syllabus.htm</tt></a>
+    </p>
+    <h3>
+        Encoding Real x86 Instructions
+    </h3>
+    <hr />
+        <ol>
+            <li><a href="#X77_0010_real_encoding">Encoding Real x86 Instructions</a></li>
+            <li><a href="#X77_0020_encoding_overview">x86 Instructions Overview</a></li>
+            <li><a href="#X77_0030_encoding_format">x86 Instruction Format Reference</a></li>
+            <li><a href="#X77_0040_opcode_sizes">x86 Opcode Sizes</a></li>
+            <li><a href="#X77_0050_add_opcode">x86 ADD Instruction Opcode</a></li>
+            <li><a href="#X77_0060_mod_reg_r_m_byte">Encoding x86 Instruction Operands, MOD-REG-R/M Byte</a></li>
+            <li><a href="#X77_0070_gp_registers">General-Purpose Registers</a></li>
+            <li><a href="#X77_0080_mod_reg_r_m_byte_reg">REG Field of the MOD-REG-R/M Byte</a></li>
+            <li><a href="#X77_0090_addressing_modes">MOD R/M Byte and Addressing Modes</a></li>
+            <li><a href="#X77_0100_sib_byte_layout">SIB (Scaled Index Byte) Layout</a></li>
+            <li><a href="#X77_0110_scaled_indexed">Scaled Indexed Addressing Mode</a></li>
+            <li><a href="#X77_0120_encoding_add">Encoding ADD Instruction Example</a></li>
+            <li><a href="#X77_0130_encoding_add_cl_al">Encoding ADD CL, AL Instruction</a></li>
+            <li><a href="#X77_0140_encoding_add_ecx_eax">Encoding ADD ECX, EAX Instruction</a></li>
+            <li><a href="#X77_0150_encoding_add_edx_displacement">Encoding ADD EDX, DISPLACEMENT Instruction</a></li>
+            <li><a href="#X77_0160_encoding_add_edi_ebx">Encoding ADD EDI, [EBX] Instruction</a></li>
+            <li><a href="#X77_0170_encoding_add_eax_esi_disp8">Encoding ADD EAX, [ ESI + disp8 ] Instruction</a></li>
+            <li><a href="#X77_0180_encoding_add_ebx_ebp_disp32">Encoding ADD EBX, [ EBP + disp32 ] Instruction</a></li>
+            <li><a href="#X77_0190_encoding_add_ebp_disp32_eax_1">Encoding ADD EBP, [ disp32 + EAX*1 ] Instruction</a></li>
+            <li><a href="#X77_0200_encoding_add_ecx_ebx_edi_4">Encoding ADD ECX, [ EBX + EDI*4 ] Instruction</a></li>
+            <li><a href="#X77_0210_encoding_add_immediate">Encoding ADD Immediate Instruction</a></li>
+            <li><a href="#X77_0220_operands_8_16_32">Encoding Eight, Sixteen, and Thirty-Two Bit Operands</a></li>
+            <li><a href="#X77_0230_operands_16">Encoding Sixteen Bit Operands</a></li>
+            <li><a href="#X77_0240_prefix">x86 Instruction Prefix Bytes</a></li>
+            <li><a href="#X77_0250_alternate_encodings">Alternate Encodings for Instructions</a></li>
+            <li><a href="#X77_0260_opcode">x86 Opcode Summary</a></li>
+            <li><a href="#X77_0270_modrm_byte">MOD-REG-R/M Byte Summary</a></li>
+            <li><a href="#X77_0280_design_considerations">ISA Design Considerations</a></li>
+            <li><a href="#X77_0290_design_challenges">ISA Design Challenges</a></li>
+            <li><a href="#X77_0300_intel_manual">Intel Architecture Software Developer's Manual</a></li>
+            <li><a href="#X77_0310_intel_manual_volume2">Intel Instruction Set Reference (Volume2)</a></li>
+            <li><a href="#X77_0320_intel_manual_chapter3">Chapter 3 of Intel Instruction Set Reference</a></li>
+            <li><a href="#X77_0330_intel_manual_opcode_bytes">Intel Reference Opcode Bytes</a></li>
+            <li><a href="#X77_0340_intel_manual_opcode_bytes_cont">Intel Reference Opcode Bytes, Cont.</a></li>
+            <li><a href="#X77_0350_intel_manual_opcode_bytes_cont">Intel Reference Opcode Bytes, Cont.</a></li>
+            <li><a href="#X77_0360_intel_manual_opcode_bytes_cont">Intel Reference Opcode Bytes, Cont.</a></li>
+            <li><a href="#X77_0370_intel_manual_opcode_bytes_cont">Intel Reference Opcode Bytes, Cont.</a></li>
+            <li><a href="#X77_0380_intel_manual_opcode_bytes_cont">Intel Reference Opcode Bytes, Cont.</a></li>
+            <li><a href="#X77_0390_intel_manual_instruction_column">Intel Reference Instruction Column</a></li>
+        </ol>
+<a id="X77_0010_real_encoding"></a>
+
+
+    <h3>
+        1. Encoding Real x86 Instructions
+    </h3>
+ <hr />
+ <ul>
+  <li>
+   <p>
+    It is time to take a look that the actual machine instruction format of the x86 CPU family.
+   </p>
+  </li>
+  <li>
+   <p>
+    They don't call the x86 CPU a Complex Instruction Set Computer (CISC) for nothing!
+   </p>
+  </li>
+  <li>
+   <p>
+    Although more complex instruction encodings exist, no one is going to challenge that the x86 has a complex instruction encoding:
+   </p>
+   <p>
+    &nbsp;
+    <img src="http://www.c-jump.com/CIS77/images/x86_instruction_encoding.png" alt="x86 Instruction Encoding" />
+   </p>
+   <p>
+    &nbsp;
+   </p>
+  </li>
+ </ul>
+ <hr />
+
+
+<a id="X77_0020_encoding_overview"></a>
+
+
+    <h3>
+        2. x86 Instructions Overview
+    </h3>
+ <hr />
+     <table border="0" cellspacing="0" cellpadding="2">
+         <tr>
+             <td valign="top">
+ <ul style="list-style-type:none;">
+  <li>
+   <p>
+     Although the diagram seems to imply that instructions can be up to 16 bytes long, in actuality the x86 will not allow instructions greater than 15 bytes in length.
+   </p>
+  </li>
+  <li>
+   <p>
+    The prefix bytes <strong>are not</strong> the <em>opcode expansion prefix</em> discussed earlier - they are special bytes to modify the behavior of existing instructions.
+   </p>
+  </li>
+ </ul>
+             </td>
+             <td valign="top">
+ <ul style="list-style-type:none;">
+  <li>
+   <p>
+     x86 Instruction Encoding:
+   </p>
+   <p>
+    &nbsp;
+    <img src="http://www.c-jump.com/CIS77/images/x86_instruction_encoding.png" alt="x86 Instruction Encoding" />
+   </p>
+  </li>
+ </ul>
+             </td>
+         </tr>
+     </table>
+ <ul style="list-style-type:none;">
+  <li>
+   <p>
+    &nbsp;
+   </p>
+  </li>
+ </ul>
+ <hr />
+
+
+<a id="X77_0030_encoding_format"></a>
+
+
+    <h3>
+        3. x86 Instruction Format Reference
+    </h3>
+ <hr />
+     <table border="0" cellspacing="0" cellpadding="2">
+         <tr>
+             <td valign="top">
+ <ul style="list-style-type:none;">
+  <li>
+   <p>
+     Another view of the x86 instruction format:
+   </p>
+   <p>
+    &nbsp;
+   </p>
+   <p>
+    &nbsp;
+    <img src="http://www.c-jump.com/CIS77/images/x86_instruction_format.png" alt="The x86 instruction format" />
+   </p>
+  </li>
+ </ul>
+             </td>
+             <td valign="top">
+ <ul style="list-style-type:none;">
+  <li>
+   <p>
+     Additional reference: 
+   </p>
+   <ul>
+    <li>
+     <p>
+      Intel x86
+      <a href="http://www.c-jump.com/CIS77/reference/Instructions_by_Opcode.html" target="_blank">instructions by opcode</a>
+     </p>
+    </li>
+    <li>
+     <p>
+      Intel x86
+      <a href="http://www.c-jump.com/CIS77/reference/Instructions_by_Mnemonic.html" target="_blank">instructions by mnemonic</a>
+     </p>
+    </li>
+    <li>
+     <p>
+      Brief Intel x86 instruction
+      <a href="http://www.c-jump.com/CIS77/reference/ISA/index.html" target="_blank">reference.</a>
+     </p>
+    </li>
+   </ul>
+  </li>
+ </ul>
+             </td>
+         </tr>
+     </table>
+ <ul style="list-style-type:none;">
+  <li>
+   <p>
+    &nbsp;
+   </p>
+  </li>
+ </ul>
+ <hr />
+
+
+<a id="X77_0040_opcode_sizes"></a>
+
+
+    <h3>
+        4. x86 Opcode Sizes
+    </h3>
+ <hr />
+     <table border="0" cellspacing="0" cellpadding="2">
+         <tr>
+             <td valign="top">
+ <ul style="list-style-type:none;">
+  <li>
+   <p>
+     The x86 CPU supports two basic opcode sizes:
+   </p>
+   <ol>
+    <li>
+     <p>
+       standard <strong>one</strong>-byte opcode
+     </p>
+    </li>
+    <li>
+     <p>
+      <strong>two</strong>-byte opcode consisting of a <strong>0Fh</strong> <em>opcode expansion prefix byte</em>.
+     </p>
+     <p>
+      The second byte then specifies the actual instruction.
+     </p>
+    </li>
+   </ol>
+  </li>
+ </ul>
+             </td>
+             <td valign="top">
+ <ul style="list-style-type:none;">
+  <li>
+   <p>
+     x86 instruction format:
+   </p>
+   <p>
+    &nbsp;
+    <img src="http://www.c-jump.com/CIS77/images/x86_instruction_format.png" alt="The x86 instruction format" />
+   </p>
+  </li>
+ </ul>
+             </td>
+         </tr>
+     </table>
+ <ul>
+  <li>
+   <p>
+    The x86 opcode bytes are 8-bit equivalents of <strong>iii</strong> field that we discussed in simplified encoding.
+   </p>
+  </li>
+  <li>
+   <p>
+    This provides for up to 512 different instruction classes, although the x86 does not yet use them all.
+   </p>
+   <p>
+    &nbsp;
+   </p>
+  </li>
+ </ul>
+ <hr />
+
+
+<a id="X77_0050_add_opcode"></a>
+
+
+    <h3>
+        5. x86 ADD Instruction Opcode
+    </h3>
+ <hr />
+     <table border="0" cellspacing="0" cellpadding="2">
+         <tr>
+             <td valign="top">
+ <ul style="list-style-type:none;">
+  <li>
+   <p>
+     Bit number <strong>zero</strong> marked <strong>s</strong> specifies the <strong>size</strong> of the operands the <span style="color: blue">ADD</span> instruction operates upon:
+   </p>
+   <ul>
+    <li>
+     <p>
+      If <strong>s = 0</strong> then the operands are 8-bit registers and memory locations.
+     </p>
+    </li>
+    <li>
+     <p>
+      If <strong>s = 1</strong> then the operands are either 16-bits or 32-bits:
+     </p>
+     <ul>
+      <li>
+       <p>
+        Under 32-bit operating systems the default is 32-bit operands if <strong>s = 1</strong>.
+       </p>
+      </li>
+      <li>
+       <p>
+        To specify a 16-bit operand (under Windows or Linux) you must insert a special <em>operand-size prefix byte</em> in front of the instruction (example of this later.)
+       </p>
+      </li>
+     </ul>
+    </li>
+   </ul>
+  </li>
+  <li>
+   <p>
+    _________________________
+   </p>
+  </li>
+  <li>
+   <p>
+    You'll soon see that this direction bit <strong>d</strong> creates a problem that results in one instruction have two different possible opcodes.
+   </p>
+  </li>
+ </ul>
+             </td>
+             <td valign="top">
+ <ul style="list-style-type:none;">
+  <li>
+   <p>
+     x86 ADD
+    <a href="http://www.c-jump.com/CIS77/images/x86_instruction_format.png" target="_blank">instruction opcode</a>
+    :
+   </p>
+   <p>
+    &nbsp;
+    <img src="http://www.c-jump.com/CIS77/images/x86_add_opcode.png" alt="x86 ADD Opcode" />
+   </p>
+  </li>
+  <li>
+   <p>
+    Bit number <strong>one</strong>, marked <strong>d</strong>, specifies the <strong>direction</strong> of the data transfer:
+   </p>
+   <ul>
+    <li>
+     <p>
+      If <strong>d = 0</strong> then the destination operand is a memory location, e.g.
+     </p>
+<pre>        add [ebx], al
+</pre>
+    </li>
+    <li>
+     <p>
+      If <strong>d = 1</strong> then the destination operand is a register, e.g.
+     </p>
+<pre>        add al, [ebx]
+</pre>
+    </li>
+   </ul>
+  </li>
+ </ul>
+             </td>
+         </tr>
+     </table>
+ <ul style="list-style-type:none;">
+  <li>
+   <p>
+    &nbsp;
+   </p>
+  </li>
+ </ul>
+ <hr />
+
+
+<a id="X77_0060_mod_reg_r_m_byte"></a>
+
+
+    <h3>
+        6. Encoding x86 Instruction Operands, MOD-REG-R/M Byte
+    </h3>
+ <hr />
+ <ul style="list-style-type:none;">
+  <li>
+   <p>
+     The <span style="color: blue">MOD-REG-R/M</span> byte specifies
+    <a href="http://www.c-jump.com/CIS77/images/x86_instruction_format.png" target="_blank">instruction</a>
+    operands and their addressing mode<strong><sup>(*)</sup></strong>:
+   </p>
+  </li>
+ </ul>
+     <table border="0" cellspacing="0" cellpadding="2">
+         <tr>
+             <td valign="top">
+ <ul style="list-style-type:none;">
+  <li>
+   <p>
+     &nbsp;
+    <img src="http://www.c-jump.com/CIS77/images/mod_reg_r_m_byte.png" alt="MOD-REG-R/M Byte" />
+   </p>
+  </li>
+ </ul>
+ <ul style="list-style-type:none;">
+  <li>
+   <p>
+     The <strong>MOD</strong> field specifies x86 addressing mode:
+   </p>
+   <p>
+    &nbsp;
+    <img src="http://www.c-jump.com/CIS77/images/mod_meaning.png" alt="MOD Meaning" />
+   </p>
+  </li>
+ </ul>
+ <ul style="list-style-type:none;">
+  <li>
+   <p>
+     The <strong>REG</strong> field specifies source or destination <strong>register</strong>:
+   </p>
+   <p>
+    &nbsp;
+    <img src="http://www.c-jump.com/CIS77/images/x86_register_encoding.png" alt="x86 register encoding" />
+   </p>
+  </li>
+ </ul>
+             </td>
+             <td valign="top">
+ <ul style="list-style-type:none;">
+  <li>
+   <p>
+     The <strong>R/M</strong> field, combined with <strong>MOD</strong>, specifies either
+   </p>
+   <ol>
+    <li>
+     <p>
+       the second operand in a <strong>two</strong>-operand instruction, or
+     </p>
+    </li>
+    <li>
+     <p>
+      the only operand in a <strong>single</strong>-operand instruction like <span style="color: blue">NOT</span> or <span style="color: blue">NEG</span>.
+     </p>
+    </li>
+   </ol>
+  </li>
+  <li>
+   <p>
+    The <strong>d</strong> bit in the opcode determines which operand is the source, and which is the destination:
+   </p>
+   <ul style="list-style-type:none;">
+    <li>
+     <p>
+       <strong>d=0: MOD R/M <tt>&lt;-</tt> REG</strong>, REG is the source
+     </p>
+    </li>
+    <li>
+     <p>
+      <strong>d=1: REG <tt>&lt;-</tt> MOD R/M</strong>, REG is the destination
+     </p>
+    </li>
+   </ul>
+  </li>
+ </ul>
+ <ul style="list-style-type:none;">
+  <li>
+   <p>
+     ___________
+   </p>
+  </li>
+  <li>
+   <p>
+    <strong><sup>(*)</sup></strong> Technically, registers do not have an address, but we apply the term <em>addressing mode</em> to registers nonetheless.
+   </p>
+  </li>
+ </ul>
+             </td>
+         </tr>
+     </table>
+ <ul style="list-style-type:none;">
+  <li>
+   <p>
+    &nbsp;
+   </p>
+  </li>
+ </ul>
+ <hr />
+
+
+<a id="X77_0070_gp_registers"></a>
+
+
+    <h3>
+        7. General-Purpose Registers
+    </h3>
+ <hr />
+     <table border="0" cellspacing="0" cellpadding="2">
+         <tr>
+             <td valign="top">
+ <ul>
+  <li>
+   <p>
+    The <span style="color: blue">EAX</span>, <span style="color: blue">EDX</span>, <span style="color: blue">ECX</span>, <span style="color: blue">EBX</span>, <span style="color: blue">EBP</span>, <span style="color: blue">EDI</span>, and <span style="color: blue">ESI</span> registers are 32-bit general-purpose registers, used for temporary data storage and memory access.
+   </p>
+  </li>
+  <li>
+   <p>
+    The <span style="color: blue">AX</span>, <span style="color: blue">DX</span>, <span style="color: blue">CX</span>, <span style="color: blue">BX</span>, <span style="color: blue">BP</span>, <span style="color: blue">DI</span>, and <span style="color: blue">SI</span> registers are 16-bit equivalents of the above, they represent the low-order 16 bits of 32-bit registers.
+   </p>
+  </li>
+  <li>
+   <p>
+    The <span style="color: blue">AH</span>, <span style="color: blue">DH</span>, <span style="color: blue">CH</span>, and <span style="color: blue">BH</span> registers represent the high-order 8 bits of the corresponding registers.
+   </p>
+  </li>
+ </ul>
+             </td>
+             <td valign="top">
+ <ul style="list-style-type:none;">
+  <li>
+   <p>
+    &nbsp;
+    <img src="http://www.c-jump.com/CIS77/asm_images/gp_registers.jpg" alt="16-bit general-purpose registers" />
+   </p>
+  </li>
+  <li>
+   <p>
+    Since the processor accesses registers more quickly than it accesses memory, you can make your programs run faster by keeping the most-frequently used data in registers.
+   </p>
+  </li>
+ </ul>
+             </td>
+         </tr>
+     </table>
+ <ul>
+  <li>
+   <p>
+    Similarly, <span style="color: blue">AL</span>, <span style="color: blue">DL</span>, <span style="color: blue">CL</span>, and <span style="color: blue">BL</span> represent the low-order 8 bits of the registers.
+   </p>
+   <p>
+    &nbsp;
+   </p>
+  </li>
+ </ul>
+ <hr />
+
+
+<a id="X77_0080_mod_reg_r_m_byte_reg"></a>
+
+
+    <h3>
+        8. REG Field of the MOD-REG-R/M Byte
+    </h3>
+ <hr />
+     <table border="0" cellspacing="0" cellpadding="2">
+         <tr>
+             <td valign="top">
+ <ul style="list-style-type:none;">
+  <li>
+   <p>
+     &nbsp;
+    <img src="http://www.c-jump.com/CIS77/images/mod_reg_r_m_byte.png" alt="MOD-REG-R/M Byte" />
+   </p>
+  </li>
+  <li>
+   <p>
+    The <strong>REG</strong> field specifies an x86 register<strong><sup>(*)</sup></strong>:
+   </p>
+   <p>
+    &nbsp;
+    <img src="http://www.c-jump.com/CIS77/images/x86_register_encoding.png" alt="x86 register encoding" />
+   </p>
+  </li>
+ </ul>
+             </td>
+             <td valign="top">
+ <ul style="list-style-type:none;">
+  <li>
+   <p>
+     Depending on the
+    <a href="http://www.c-jump.com/CIS77/images/x86_instruction_format.png" target="_blank">instruction</a>
+    , this can be either the <em>source</em> or the destination operand.
+   </p>
+  </li>
+  <li>
+   <p>
+    Many instructions have the <strong>d</strong> (direction) field in their opcode to choose <strong>REG</strong> operand role:
+   </p>
+   <ol>
+    <li>
+     <p>
+       If <strong>d=0</strong>, <strong>REG</strong> is the source,
+      <br />
+      <strong>MOD R/M <tt>&lt;-</tt> REG</strong>.
+     </p>
+    </li>
+    <li>
+     <p>
+      If <strong>d=1</strong>, <strong>REG</strong> is the destination,
+      <br />
+      <strong>REG <tt>&lt;-</tt> MOD R/M</strong>.
+     </p>
+    </li>
+   </ol>
+  </li>
+ </ul>
+             </td>
+         </tr>
+     </table>
+ <ul style="list-style-type:none;">
+  <li>
+   <p>
+     ___________
+   </p>
+  </li>
+  <li>
+   <p>
+    <strong><sup>(*)</sup></strong> For certain (often single-operand or immediate-operand) instructions, the <strong>REG</strong> field may contain an <em>opcode extension</em> rather than the register bits. The <strong>R/M</strong> field will specify the operand in such case.
+   </p>
+   <p>
+    &nbsp;
+   </p>
+  </li>
+ </ul>
+ <hr />
+
+
+<a id="X77_0090_addressing_modes"></a>
+
+
+    <h3>
+        9. MOD R/M Byte and Addressing Modes
+    </h3>
+     <table border="1" cellspacing="0" cellpadding="2">
+         <tr>
+             <td valign="top">
+ <ul style="list-style-type:none;">
+  <li>
+<pre>MOD R/M Addressing Mode
+=== === ================================
+ 00 000 [ <span style="color: blue">eax</span> ]
+ 01 000 [ <span style="color: blue">eax</span> + <strong>disp8</strong> ]               (1)
+ 10 000 [ <span style="color: blue">eax</span> + <strong>disp32</strong> ]
+ 11 000 <span style="color: blue">register</span>  ( <span style="color: blue">al</span> / <span style="color: blue">ax</span> / <span style="color: blue">eax</span> )   (2)
+ 00 001 [ <span style="color: blue">ecx</span> ]
+ 01 001 [ <span style="color: blue">ecx</span> + <strong>disp8</strong> ]
+ 10 001 [ <span style="color: blue">ecx</span> + <strong>disp32</strong> ]
+ 11 001 <span style="color: blue">register</span>  ( <span style="color: blue">cl</span> / <span style="color: blue">cx</span> / <span style="color: blue">ecx</span> )
+ 00 010 [ <span style="color: blue">edx</span> ]
+ 01 010 [ <span style="color: blue">edx</span> + <strong>disp8</strong> ]
+ 10 010 [ <span style="color: blue">edx</span> + <strong>disp32</strong> ]
+ 11 010 <span style="color: blue">register</span>  ( <span style="color: blue">dl</span> / <span style="color: blue">dx</span> / <span style="color: blue">edx</span> )
+ 00 011 [ <span style="color: blue">ebx</span> ]
+ 01 011 [ <span style="color: blue">ebx</span> + <strong>disp8</strong> ]
+ 10 011 [ <span style="color: blue">ebx</span> + <strong>disp32</strong> ]
+ 11 011 <span style="color: blue">register</span>  ( <span style="color: blue">bl</span> / <span style="color: blue">bx</span> / <span style="color: blue">ebx</span> )
+ 00 100 <strong>SIB</strong>  Mode                     (3)
+ 01 100 <strong>SIB</strong>  +  <strong>disp8</strong>  Mode
+ 10 100 <strong>SIB</strong>  +  <strong>disp32</strong>  Mode
+ 11 100 <span style="color: blue">register</span>  ( <span style="color: blue">ah</span> / <span style="color: blue">sp</span> / <span style="color: blue">esp</span> )
+ 00 101 32-bit Displacement-Only Mode (4)
+ 01 101 [ <span style="color: blue">ebp</span> + <strong>disp8</strong> ]
+ 10 101 [ <span style="color: blue">ebp</span> + <strong>disp32</strong> ]
+ 11 101 <span style="color: blue">register</span>  ( <span style="color: blue">ch</span> / <span style="color: blue">bp</span> / <span style="color: blue">ebp</span> )
+ 00 110 [ <span style="color: blue">esi</span> ]
+ 01 110 [ <span style="color: blue">esi</span> + <strong>disp8</strong> ]
+ 10 110 [ <span style="color: blue">esi</span> + <strong>disp32</strong> ]
+ 11 110 <span style="color: blue">register</span>  ( <span style="color: blue">dh</span> / <span style="color: blue">si</span> / <span style="color: blue">esi</span> )
+ 00 111 [ <span style="color: blue">edi</span> ]
+ 01 111 [ <span style="color: blue">edi</span> + <strong>disp8</strong> ]
+ 10 111 [ <span style="color: blue">edi</span> + <strong>disp32</strong> ]
+ 11 111 <span style="color: blue">register</span>  ( <span style="color: blue">bh</span> / <span style="color: blue">di</span> / <span style="color: blue">edi</span> )
+</pre>
+  </li>
+ </ul>
+             </td>
+             <td valign="top">
+ <ul style="list-style-type:none;">
+  <li>
+   <p>
+     &nbsp;
+   </p>
+  </li>
+ </ul>
+ <ol>
+  <li>
+   <p>
+     Addressing modes with 8-bit displacement fall in the range -128..+127 and require only a single byte displacement after the
+    <a href="http://www.c-jump.com/CIS77/images/x86_instruction_format.png" target="_blank">opcode</a>
+    (Faster!)
+   </p>
+  </li>
+  <li>
+   <p>
+    The size bit in the opcode specifies 8 or 32-bit register size. To select a 16-bit register requires a prefix byte.
+   </p>
+  </li>
+  <li>
+   <p>
+    The so-called scaled indexed addressing modes, <strong>SIB</strong> = scaled index byte mode.
+   </p>
+  </li>
+  <li>
+   <p>
+    Note that there is no [ <span style="color: blue">ebp</span> ] addressing. It's slot is occupied by the 32-bit <em>displacement only</em> addressing mode. Intel decided that programmers can use [ <span style="color: blue">ebp</span>+ <strong>disp8</strong> ] addressing mode instead, with its 8-bit displacement set equal to zero (instruction is a little longer, though.)
+   </p>
+  </li>
+ </ol>
+             </td>
+         </tr>
+     </table>
+ <ul style="list-style-type:none;">
+  <li>
+   <p>
+    &nbsp;
+   </p>
+  </li>
+ </ul>
+ <hr />
+
+
+<a id="X77_0100_sib_byte_layout"></a>
+
+
+    <h3>
+        10. SIB (Scaled Index Byte) Layout
+    </h3>
+ <hr />
+     <table border="0" cellspacing="0" cellpadding="2">
+         <tr>
+             <td valign="top">
+ <ul>
+  <li>
+   <p>
+    <em>Scaled indexed addressing mode</em> uses the second byte (namely, <strong>SIB</strong> byte) that follows the <strong>MOD-REG-R/M</strong> byte in the
+    <a href="http://www.c-jump.com/CIS77/images/x86_instruction_format.png" target="_blank">instruction</a>
+    format.
+   </p>
+  </li>
+  <li>
+   <p>
+    The <strong>MOD</strong> field still specifies the displacement size of <strong>zero</strong>, <strong>one</strong>, or <strong>four</strong> bytes.
+   </p>
+   <ul style="list-style-type:none;">
+    <li>
+     <p>
+       The <strong>MOD-REG-R/M</strong> and SIB bytes are complex, because Intel reused 16-bit addressing circuitry in the 32-bit mode, rather than simply abandoning the 16-bit format in the 32-bit mode.
+     </p>
+    </li>
+    <li>
+     <p>
+      There are good hardware reasons for this, but the end result is a complex scheme for specifying addressing modes in the opcodes.
+     </p>
+    </li>
+   </ul>
+  </li>
+ </ul>
+             </td>
+             <td valign="top">
+ <ul style="list-style-type:none;">
+  <li>
+   <p>
+     Scaled index byte layout:
+   </p>
+   <p>
+    &nbsp;
+    <img src="http://www.c-jump.com/CIS77/images/sib_layout.png" alt="SIB, Scaled index byte layout" />
+   </p>
+   <p>
+    &nbsp;
+    <img src="http://www.c-jump.com/CIS77/images/sib_scaled_index.png" alt="SIB scaled index values" />
+    <img src="http://www.c-jump.com/CIS77/images/sib_index_register.png" alt="SIB index register encoding" />
+   </p>
+   <p>
+    &nbsp;
+    <img src="http://www.c-jump.com/CIS77/images/sib_base_register.png" alt="SIB base register encoding" />
+   </p>
+  </li>
+ </ul>
+             </td>
+         </tr>
+     </table>
+ <ul style="list-style-type:none;">
+  <li>
+   <p>
+    &nbsp;
+   </p>
+  </li>
+ </ul>
+ <hr />
+
+
+<a id="X77_0110_scaled_indexed"></a>
+
+
+    <h3>
+        11. Scaled Indexed Addressing Mode
+    </h3>
+     <table border="1" cellspacing="0" cellpadding="2">
+         <tr>
+             <td valign="top">
+ <ul style="list-style-type:none;">
+  <li>
+<pre>[ <span style="color: blue">reg32</span> + <span style="color: blue">eax</span>*<strong>n</strong> ] MOD = 00
+[ <span style="color: blue">reg32</span> + <span style="color: blue">ebx</span>*<strong>n</strong> ] 
+[ <span style="color: blue">reg32</span> + <span style="color: blue">ecx</span>*<strong>n</strong> ]
+[ <span style="color: blue">reg32</span> + <span style="color: blue">edx</span>*<strong>n</strong> ]
+[ <span style="color: blue">reg32</span> + <span style="color: blue">ebp</span>*<strong>n</strong> ]
+[ <span style="color: blue">reg32</span> + <span style="color: blue">esi</span>*<strong>n</strong> ]
+[ <span style="color: blue">reg32</span> + <span style="color: blue">edi</span>*<strong>n</strong> ]
+
+[ <strong>disp</strong> + <span style="color: blue">reg8</span> + <span style="color: blue">eax</span>*<strong>n</strong> ] MOD = 01
+[ <strong>disp</strong> + <span style="color: blue">reg8</span> + <span style="color: blue">ebx</span>*<strong>n</strong> ]
+[ <strong>disp</strong> + <span style="color: blue">reg8</span> + <span style="color: blue">ecx</span>*<strong>n</strong> ]
+[ <strong>disp</strong> + <span style="color: blue">reg8</span> + <span style="color: blue">edx</span>*<strong>n</strong> ]
+[ <strong>disp</strong> + <span style="color: blue">reg8</span> + <span style="color: blue">ebp</span>*<strong>n</strong> ]
+[ <strong>disp</strong> + <span style="color: blue">reg8</span> + <span style="color: blue">esi</span>*<strong>n</strong> ]
+[ <strong>disp</strong> + <span style="color: blue">reg8</span> + <span style="color: blue">edi</span>*<strong>n</strong> ]
+
+[ <strong>disp</strong> + <span style="color: blue">reg32</span> + <span style="color: blue">eax</span>*<strong>n</strong> ] MOD = 10
+[ <strong>disp</strong> + <span style="color: blue">reg32</span> + <span style="color: blue">ebx</span>*<strong>n</strong> ]
+[ <strong>disp</strong> + <span style="color: blue">reg32</span> + <span style="color: blue">ecx</span>*<strong>n</strong> ]
+[ <strong>disp</strong> + <span style="color: blue">reg32</span> + <span style="color: blue">edx</span>*<strong>n</strong> ]
+[ <strong>disp</strong> + <span style="color: blue">reg32</span> + <span style="color: blue">ebp</span>*<strong>n</strong> ]
+[ <strong>disp</strong> + <span style="color: blue">reg32</span> + <span style="color: blue">esi</span>*<strong>n</strong> ]
+[ <strong>disp</strong> + <span style="color: blue">reg32</span> + <span style="color: blue">edi</span>*<strong>n</strong> ]
+
+[ <strong>disp</strong> + <span style="color: blue">eax</span>*<strong>n</strong> ] MOD = 00, and
+[ <strong>disp</strong> + <span style="color: blue">ebx</span>*<strong>n</strong> ] BASE field = 101
+[ <strong>disp</strong> + <span style="color: blue">ecx</span>*<strong>n</strong> ]
+[ <strong>disp</strong> + <span style="color: blue">edx</span>*<strong>n</strong> ]
+[ <strong>disp</strong> + <span style="color: blue">ebp</span>*<strong>n</strong> ]
+[ <strong>disp</strong> + <span style="color: blue">esi</span>*<strong>n</strong> ]
+[ <strong>disp</strong> + <span style="color: blue">edi</span>*<strong>n</strong> ]
+</pre>
+  </li>
+ </ul>
+             </td>
+             <td valign="top">
+ <ul style="list-style-type:none;">
+  <li>
+   <p>
+     &nbsp;
+   </p>
+   <p>
+    Note: <strong>n</strong> = <strong>1</strong>, <strong>2</strong>, <strong>4</strong>, or <strong>8</strong>.
+   </p>
+  </li>
+  <li>
+   <p>
+    In each <strong>scaled indexed addressing mode</strong> the <strong>MOD</strong> field in <strong>MOD-REG-R/M</strong> byte specifies the <em>size of the displacement</em>. It can be zero, one, or four bytes:
+   </p>
+<pre>    MOD R/M  Addressing Mode
+    --- ---  --------------------------- 
+     00 100  <strong>SIB</strong>
+     01 100  <strong>SIB</strong> + <strong>disp8</strong>
+     10 100  <strong>SIB</strong> + <strong>disp32</strong>
+</pre>
+  </li>
+  <li>
+   <p>
+    The <strong>Base</strong> and <strong>Index</strong> fields of the
+    <a href="http://www.c-jump.com/CIS77/images/x86_instruction_format.png" target="_blank">SIB byte</a>
+    select the base and index registers, respectively.
+   </p>
+  </li>
+  <li>
+   <p>
+    Note that this addressing mode does not allow the use of the <strong>ESP</strong> register as an index register.
+    Presumably, Intel left this particular mode undefined to provide the ability to extend the addressing modes in a future version of the CPU.
+   </p>
+  </li>
+ </ul>
+             </td>
+         </tr>
+     </table>
+ <ul style="list-style-type:none;">
+  <li>
+   <p>
+    &nbsp;
+   </p>
+  </li>
+ </ul>
+ <hr />
+
+
+<a id="X77_0120_encoding_add"></a>
+
+
+    <h3>
+        12. Encoding ADD Instruction Example
+    </h3>
+ <hr />
+ <ul style="list-style-type:none;">
+  <li>
+   <p>
+     The <span style="color: blue">ADD</span>
+    <a href="http://www.c-jump.com/CIS77/images/x86_instruction_format.png" target="_blank">opcode</a>
+    can be decimal 0, 1, 2, or 3, depending on the direction and size bits in the opcode:
+   </p>
+   <ul style="list-style-type:none;">
+    <li>
+     <p>
+       &nbsp;
+      <img src="http://www.c-jump.com/CIS77/images/x86_add_opcode.png" alt="ADD opcode" />
+     </p>
+    </li>
+   </ul>
+  </li>
+  <li>
+   <p>
+    How could we encode various forms of the <span style="color: blue">ADD</span> instruction using different addressing modes?
+   </p>
+   <p>
+    &nbsp;
+   </p>
+   <p>
+    &nbsp;
+   </p>
+  </li>
+ </ul>
+ <hr />
+
+
+<a id="X77_0130_encoding_add_cl_al"></a>
+
+
+    <h3>
+        13. Encoding ADD CL, AL Instruction
+    </h3>
+ <hr />
+ <ul style="list-style-type:none;">
+  <li>
+   <p>
+     &nbsp;
+    <img src="http://www.c-jump.com/CIS77/images/encoding_add_cl_al.png" alt="Encoding ADD AL, CL Instruction" />
+   </p>
+  </li>
+ </ul>
+ <ul>
+  <li>
+   <p>
+    Interesting side effect of the direction bit and the <strong>MOD-REG-R/M byte</strong> organization: some instructions can have two different opcodes, and both are legal!
+   </p>
+  </li>
+  <li>
+   <p>
+    For example, encoding of
+   </p>
+<pre>    add cl, al
+</pre>
+   <p>
+    could be <strong>00 C1</strong> (if <strong>d=0</strong>), or <strong>02 C8</strong>, if <strong>d</strong> bit is set to <strong>1</strong>.
+   </p>
+  </li>
+  <li>
+   <p>
+    The possibility of opcode duality issue here applies to all instructions with two register operands.
+   </p>
+   <p>
+    &nbsp;
+   </p>
+  </li>
+ </ul>
+ <hr />
+
+
+<a id="X77_0140_encoding_add_ecx_eax"></a>
+
+
+    <h3>
+        14. Encoding ADD ECX, EAX Instruction
+    </h3>
+ <hr />
+ <ul style="list-style-type:none;">
+  <li>
+<pre>    add ecx, eax
+</pre>
+  </li>
+ </ul>
+ <ul style="list-style-type:none;">
+  <li>
+   <p>
+     &nbsp;
+    <img src="http://www.c-jump.com/CIS77/images/encoding_add_ecx_eax.png" alt="Encoding ADD ECX, EAX Instruction" />
+   </p>
+  </li>
+  <li>
+   <p>
+    Note that we could also encode <span style="color: blue">ADD</span> <strong>ECX</strong>, <strong>EAX</strong> using the bytes <strong>03 C8</strong>.
+   </p>
+   <p>
+    &nbsp;
+   </p>
+   <p>
+    &nbsp;
+   </p>
+  </li>
+ </ul>
+ <hr />
+
+
+<a id="X77_0150_encoding_add_edx_displacement"></a>
+
+
+    <h3>
+        15. Encoding ADD EDX, DISPLACEMENT Instruction
+    </h3>
+ <hr />
+ <ul style="list-style-type:none;">
+  <li>
+   <p>
+     Encoding the <span style="color: blue">ADD</span> <strong>EDX</strong>, DISP Instruction:
+   </p>
+<pre>    add edx, disp
+    <img src="http://www.c-jump.com/CIS77/images/encoding_add_edx_disp.png" alt="Encoding the ADD EDX, DISP Instruction" />
+</pre>
+   <p>
+    &nbsp;
+   </p>
+   <p>
+    &nbsp;
+   </p>
+  </li>
+ </ul>
+ <hr />
+
+
+<a id="X77_0160_encoding_add_edi_ebx"></a>
+
+
+    <h3>
+        16. Encoding ADD EDI, [EBX] Instruction
+    </h3>
+ <hr />
+ <ul style="list-style-type:none;">
+  <li>
+   <p>
+     Encoding the <span style="color: blue">ADD</span> <strong>EDI</strong>, [ <strong>EBX</strong> ] instruction:
+   </p>
+<pre>    add edi, [ebx]
+    <img src="http://www.c-jump.com/CIS77/images/encoding_add_edi_ebx.png" alt="Encoding the ADD EDI, [EBX] Instruction" />
+</pre>
+   <p>
+    &nbsp;
+   </p>
+   <p>
+    &nbsp;
+   </p>
+  </li>
+ </ul>
+ <hr />
+
+
+<a id="X77_0170_encoding_add_eax_esi_disp8"></a>
+
+
+    <h3>
+        17. Encoding ADD EAX, [ ESI + disp8 ] Instruction
+    </h3>
+ <hr />
+ <ul style="list-style-type:none;">
+  <li>
+   <p>
+     Encoding the <span style="color: blue">ADD</span> <strong>EAX</strong>, [ <strong>ESI</strong> + <strong>disp8</strong> ] instruction:
+   </p>
+<pre>    add eax, [ esi + disp8 ]
+    <img src="http://www.c-jump.com/CIS77/images/encoding_add_eax_esi_disp8.png" alt="Encoding the ADD EAX, [ ESI + disp8 ] Instruction" />
+</pre>
+   <p>
+    &nbsp;
+   </p>
+   <p>
+    &nbsp;
+   </p>
+  </li>
+ </ul>
+ <hr />
+
+
+<a id="X77_0180_encoding_add_ebx_ebp_disp32"></a>
+
+
+    <h3>
+        18. Encoding ADD EBX, [ EBP + disp32 ] Instruction
+    </h3>
+ <hr />
+ <ul style="list-style-type:none;">
+  <li>
+   <p>
+     Encoding the <span style="color: blue">ADD</span> <strong>EBX</strong>, [ <strong>EBP</strong> + <strong>disp32</strong> ] instruction:
+   </p>
+<pre>    add ebx, [ ebp + disp32 ]
+    <img src="http://www.c-jump.com/CIS77/images/encoding_add_ebx_ebp_disp32.png" alt="Encoding the ADD EBX, [ EBP + disp32 ] Instruction" />
+</pre>
+   <p>
+    &nbsp;
+   </p>
+   <p>
+    &nbsp;
+   </p>
+  </li>
+ </ul>
+ <hr />
+
+
+<a id="X77_0190_encoding_add_ebp_disp32_eax_1"></a>
+
+
+    <h3>
+        19. Encoding ADD EBP, [ disp32 + EAX*1 ] Instruction
+    </h3>
+ <hr />
+ <ul style="list-style-type:none;">
+  <li>
+   <p>
+     Encoding the <span style="color: blue">ADD</span> <strong>EBP</strong>, [ <strong>disp32</strong> + <strong>EAX</strong>*1 ] Instruction
+   </p>
+<pre>    add ebp, [ disp32 + eax*1 ]
+    <img src="http://www.c-jump.com/CIS77/images/encoding_add_ebp_disp32_eax_1.png" alt="Encoding the ADD EBP, [ disp32 + EAX*1 ] Instruction" />
+</pre>
+   <p>
+    &nbsp;
+   </p>
+   <p>
+    &nbsp;
+   </p>
+  </li>
+ </ul>
+ <hr />
+
+
+<a id="X77_0200_encoding_add_ecx_ebx_edi_4"></a>
+
+
+    <h3>
+        20. Encoding ADD ECX, [ EBX + EDI*4 ] Instruction
+    </h3>
+ <hr />
+ <ul style="list-style-type:none;">
+  <li>
+   <p>
+     Encoding the <span style="color: blue">ADD</span> <strong>ECX</strong>, [ <strong>EBX</strong> + <strong>EDI</strong>*4 ] Instruction
+   </p>
+<pre>    add ecx, [ ebx + edi*4 ]
+    <img src="http://www.c-jump.com/CIS77/images/encoding_add_ecx_ebx_edi_4.png" alt="Encoding ADD ECX, [ EBX + EDI*4 ] Instruction" />
+</pre>
+   <p>
+    &nbsp;
+   </p>
+   <p>
+    &nbsp;
+   </p>
+  </li>
+ </ul>
+ <hr />
+
+
+<a id="X77_0210_encoding_add_immediate"></a>
+
+
+    <h3>
+        21. Encoding ADD Immediate Instruction
+    </h3>
+ <hr />
+     <table border="0" cellspacing="0" cellpadding="2">
+         <tr>
+             <td valign="top">
+ <ul style="list-style-type:none;">
+  <li>
+   <p>
+     <strong>MOD-REG-R/M</strong> and <strong>SIB</strong> bytes have no bit combinations to specify an immediate operand.
+   </p>
+  </li>
+  <li>
+   <p>
+    Instead, x86 uses a entirely different
+    <a href="http://www.c-jump.com/CIS77/images/x86_instruction_format.png" target="_blank">instruction format</a>
+    to specify instruction with an immediate operand.
+   </p>
+  </li>
+  <li>
+   <p>
+    There are three rules that apply:
+   </p>
+  </li>
+ </ul>
+             </td>
+             <td valign="top">
+ <ul style="list-style-type:none;">
+  <li>
+   <p>
+     Encoding x86 immediate operands:
+   </p>
+   <p>
+    &nbsp;
+    <img src="http://www.c-jump.com/CIS77/images/encoding_immediate_operands.png" alt="Encoding Immediate Operands" />
+   </p>
+  </li>
+ </ul>
+             </td>
+         </tr>
+     </table>
+ <ol>
+  <li>
+   <p>
+     If opcode high-order bit set to <strong>1</strong>, then <em>instruction has an immediate constant</em>.
+   </p>
+  </li>
+  <li>
+   <p>
+    There is no direction bit in the opcode:
+   </p>
+   <ul style="list-style-type:none;">
+    <li>
+     <p>
+      : indeed, you cannot specify a constant as a destination operand!
+     </p>
+    </li>
+    <li>
+     <p>
+      Therefore, destination operand is always the location encoded in the <strong>MOD-R/M</strong> bits of the the <strong>MOD-REG-R/M</strong> byte.
+     </p>
+    </li>
+    <li>
+     <p>
+      In place of the direction bit <strong>d</strong>, the opcode has a sign extension <strong>x</strong> bit instead:
+     </p>
+     <ul>
+      <li>
+       <p>
+        For 8-bit operands, the CPU ignores <strong>x</strong> bit.
+       </p>
+      </li>
+      <li>
+       <p>
+        For 16-bit and 32-bit operands, <strong>x</strong> bit specifies the size of the <span style="color: white; background-color: red">Constant</span> following at the end of the instruction:
+       </p>
+       <ul>
+        <li>
+         <p>
+          If <strong>x</strong> bit contains <strong>zero</strong>, the <span style="color: white; background-color: red">Constant</span> is the same size as the operand (i.e., 16 or 32 bits).
+         </p>
+        </li>
+        <li>
+         <p>
+          If <strong>x</strong> bit contains <strong>one</strong>, the <span style="color: white; background-color: red">Constant</span> is a <span style="color: blue">signed</span> 8-bit value, and the CPU sign-extends this value to the appropriate size before adding it to the operand.
+         </p>
+        </li>
+       </ul>
+      </li>
+      <li>
+       <p>
+        This little <strong>x</strong> trick often makes programs shorter, because adding small-value constants to 16 or 32 bit operands is very common.
+       </p>
+      </li>
+     </ul>
+    </li>
+   </ul>
+  </li>
+  <li>
+   <p>
+    The third difference between the <span style="color: blue">ADD</span>-immediate and the standard <span style="color: blue">ADD</span> instruction is the meaning of the <strong>REG</strong> field in the <strong>MOD-REG-R/M</strong> byte:
+   </p>
+   <ul>
+    <li>
+     <p>
+      Since the instruction implies that
+     </p>
+     <ul>
+      <li>
+       <p>
+        the source operand is a constant, and
+       </p>
+      </li>
+      <li>
+       <p>
+        <strong>MOD-R/M</strong> fields specify the destination operand,
+       </p>
+      </li>
+     </ul>
+     <p>
+      the instruction does not need to use the <strong>REG</strong> field to specify an operand.
+     </p>
+    </li>
+    <li>
+     <p>
+      Instead, the x86 CPU uses these three bits as an <strong>opcode extension</strong>.
+     </p>
+    </li>
+    <li>
+     <p>
+      For the <span style="color: blue">ADD</span>-immediate instruction the <strong>REG</strong> bits must contain zero.
+     </p>
+    </li>
+    <li>
+     <p>
+      Other bit patterns would correspond to a different instruction.
+     </p>
+    </li>
+   </ul>
+  </li>
+ </ol>
+ <ul style="list-style-type:none;">
+  <li>
+   <p>
+     Note that when adding a constant to a memory location, the displacement (if any) immediately precedes the immediate (constant) value in the opcode sequence.
+   </p>
+   <p>
+    &nbsp;
+   </p>
+  </li>
+ </ul>
+ <hr />
+
+
+<a id="X77_0220_operands_8_16_32"></a>
+
+
+    <h3>
+        22. Encoding Eight, Sixteen, and Thirty-Two Bit Operands
+    </h3>
+ <hr />
+     <table border="0" cellspacing="0" cellpadding="2">
+         <tr>
+             <td valign="top">
+ <ul>
+  <li>
+   <p>
+    When Intel designed the 8086, one bit in the opcode, <strong>s</strong>, selected between 8 and 16 bit integer operand sizes.
+   </p>
+  </li>
+  <li>
+   <p>
+    Later, when CPU added 32-bit integers to its architecture on 80386 chip, there was a problem:
+   </p>
+   <ul style="list-style-type:none;">
+    <li>
+     <p>
+       three encodings were needed to support 8, 16, and 32 bit sizes.
+     </p>
+    </li>
+   </ul>
+  </li>
+  <li>
+   <p>
+    Solution was an <em>operand size prefix byte</em>.
+   </p>
+  </li>
+ </ul>
+             </td>
+             <td valign="top">
+ <ul style="list-style-type:none;">
+  <li>
+   <p>
+     x86 ADD Opcode:
+   </p>
+   <p>
+    &nbsp;
+    <img src="http://www.c-jump.com/CIS77/images/x86_add_opcode.png" alt="x86 ADD Opcode" />
+   </p>
+  </li>
+ </ul>
+             </td>
+         </tr>
+     </table>
+ <ul>
+  <li>
+   <p>
+    Intel studied x86 instruction set and came to the conclusion:
+   </p>
+   <ul style="list-style-type:none;">
+    <li>
+     <p>
+       in a 32-bit environment, programs were more likely to use 8-bit and 32-bit operands far more often than 16-bit operands.
+     </p>
+    </li>
+   </ul>
+  </li>
+  <li>
+   <p>
+    So Intel decided to let the size bit <strong>s</strong> in the opcode select between 8- and 32-bit operands.
+   </p>
+   <p>
+    &nbsp;
+   </p>
+  </li>
+ </ul>
+ <hr />
+
+
+<a id="X77_0230_operands_16"></a>
+
+
+    <h3>
+        23. Encoding Sixteen Bit Operands
+    </h3>
+ <hr />
+     <table border="0" cellspacing="0" cellpadding="2">
+         <tr>
+             <td valign="top">
+ <ul style="list-style-type:none;">
+  <li>
+   <p>
+     32-bit programs don't use 16-bit operands that often, but they do need them now and then.
+   </p>
+  </li>
+  <li>
+   <p>
+    To allow for 16-bit operands, Intel added prefix a 32-bit mode instruction with the <em>operand size prefix byte</em> with value <strong>66h</strong>.
+   </p>
+  </li>
+  <li>
+   <p>
+    This prefix byte tells the CPU to operand on 16-bit data rather than 32-bit data.
+   </p>
+  </li>
+ </ul>
+             </td>
+             <td valign="top">
+ <ul style="list-style-type:none;">
+  <li>
+   <p>
+     x86 instruction format:
+   </p>
+   <p>
+    &nbsp;
+    <img src="http://www.c-jump.com/CIS77/images/x86_instruction_format.png" alt="instruction format" />
+   </p>
+  </li>
+ </ul>
+             </td>
+         </tr>
+     </table>
+ <ul>
+  <li>
+   <p>
+    There is nothing programmer has to do explicitly to put an operand size prefix byte in front of a 16-bit instruction:
+   </p>
+   <ul style="list-style-type:none;">
+    <li>
+     <p>
+       the assembler does this automatically as soon as 16-bit operand is found in the instruction.
+     </p>
+    </li>
+   </ul>
+  </li>
+  <li>
+   <p>
+    However, keep in mind that whenever you use a 16-bit operand in a 32-bit program, the instruction is longer by one byte:
+   </p>
+<pre>    Opcode     Instruction
+    --------   ------------
+    41h        <span style="color: blue">INC</span> ECX
+    66h 41h    <span style="color: blue">INC</span> CX
+</pre>
+  </li>
+  <li>
+   <p>
+    Be careful about using 16-bit instructions if size (and to a lesser extent, speed) are important, because
+   </p>
+   <ol>
+    <li>
+     <p>
+       instructions are longer, and
+     </p>
+    </li>
+    <li>
+     <p>
+      slower because of their effect on the instruction cache.
+     </p>
+    </li>
+   </ol>
+   <p>
+    &nbsp;
+   </p>
+  </li>
+ </ul>
+ <hr />
+
+
+<a id="X77_0240_prefix"></a>
+
+
+    <h3>
+        24. x86 Instruction Prefix Bytes
+    </h3>
+ <hr />
+ <ul>
+  <li>
+   <p>
+    x86
+    <a href="http://www.c-jump.com/CIS77/images/x86_instruction_format.png" target="_blank">instruction</a>
+    can have up to 4 prefixes.
+   </p>
+  </li>
+  <li>
+   <p>
+    Each prefix adjusts interpretation of the opcode:
+   </p>
+   <ol>
+    <li>
+     <p>
+       <strong>Repeat/lock</strong> prefix byte guarantees that instruction will have exclusive use of all shared memory, until the instruction completes execution:
+     </p>
+<pre>        F0h = <span style="color: blue">LOCK</span>
+<hr />
+</pre>
+    </li>
+    <li>
+     <p>
+      <strong>String manipulation</strong> instruction prefixes
+     </p>
+<pre>        F3h = <span style="color: blue">REP</span>, <span style="color: blue">REPE</span>
+        F2h = <span style="color: blue">REPNE</span>
+</pre>
+     <p>
+      where
+     </p>
+     <ul style="list-style-type:none;">
+      <li>
+       <p>
+         <span style="color: blue">REP</span> repeats instruction the number of times specified by <em>iteration count</em> <span style="color: blue">ECX</span>.
+       </p>
+      </li>
+      <li>
+       <p>
+        <span style="color: blue">REPE</span> and <span style="color: blue">REPNE</span> prefixes allow to terminate loop on the value of <strong>ZF</strong> CPU flag.
+       </p>
+      </li>
+     </ul>
+     <p>
+      Related string manipulation instructions are:
+     </p>
+     <ul>
+      <li>
+       <p>
+        <span style="color: blue">MOVS</span>, move string
+       </p>
+      </li>
+      <li>
+       <p>
+        <span style="color: blue">STOS</span>, store string
+       </p>
+      </li>
+      <li>
+       <p>
+        <span style="color: blue">SCAS</span>, scan string
+       </p>
+      </li>
+      <li>
+       <p>
+        <span style="color: blue">CMPS</span>, compare string, etc.
+       </p>
+      </li>
+     </ul>
+     <p>
+      See also string manipulation sample program:
+      <a href="http://www.c-jump.com/CIS77/samples/rep_movsb.htm" target="_blank"><tt>rep_movsb.asm</tt></a>
+      <hr />
+     </p>
+    </li>
+    <li>
+     <p>
+      <strong>Segment override</strong> prefix causes memory access to use <em>specified segment</em> instead of <em>default segment</em> designated for instruction operand.
+     </p>
+<pre>        2Eh = <span style="color: blue">CS</span>
+        36h = <span style="color: blue">SS</span>
+        3Eh = <span style="color: blue">DS</span>
+        26h = <span style="color: blue">ES</span>
+        64h = <span style="color: blue">FS</span>
+        65h = <span style="color: blue">GS</span>
+<hr />
+</pre>
+    </li>
+    <li>
+     <p>
+      <strong>Operand override</strong>, <strong>66h</strong>. Changes size of data expected by default mode of the instruction e.g. 16-bit to 32-bit and vice versa.
+      <hr />
+     </p>
+    </li>
+    <li>
+     <p>
+      <strong>Address override</strong>, <strong>67h</strong>. Changes size of address  expected by the instruction. 32-bit  address could switch to 16-bit and vice versa.
+     </p>
+    </li>
+   </ol>
+   <p>
+    &nbsp;
+   </p>
+  </li>
+ </ul>
+ <hr />
+
+
+<a id="X77_0250_alternate_encodings"></a>
+
+
+    <h3>
+        25. Alternate Encodings for Instructions
+    </h3>
+ <hr />
+ <ul>
+  <li>
+   <p>
+    To shorten program code, Intel created alternate (shorter) encodings of some very commonly used instructions.
+   </p>
+  </li>
+  <li>
+   <p>
+    For example, x86 provides a single byte opcode for
+   </p>
+<pre>    add al, constant    ; one-byte opcode and no MOD-REG-R/M byte
+    add eax, constant   ; one-byte opcode and no MOD-REG-R/M byte
+</pre>
+   <p>
+    the opcodes are <strong>04h</strong> and <strong>05h</strong>, respectively. Also,
+   </p>
+  </li>
+  <li>
+   <p>
+    These instructions are one byte shorter than their standard <span style="color: blue">ADD</span> immediate counterparts.
+   </p>
+  </li>
+  <li>
+   <p>
+    Note that
+   </p>
+<pre>    add ax, constant   ; operand size prefix byte + one-byte opcode, no MOD-REG-R/M byte
+</pre>
+   <p>
+    requires an operand size prefix just as a standard <span style="color: blue">ADD</span> <strong>AX</strong>, <strong>constant</strong> instruction, yet is still one byte shorter than the corresponding standard version of <span style="color: blue">ADD</span> immediate.
+   </p>
+  </li>
+  <li>
+   <p>
+    Any decent assembler will <em>automatically</em> choose the shortest possible instruction when translating program into machine code.
+   </p>
+  </li>
+  <li>
+   <p>
+    Intel only provides alternate encodings only for the accumulator registers <strong>AL</strong>, <strong>AX</strong>, <strong>EAX</strong>.
+   </p>
+  </li>
+  <li>
+   <p>
+    This is a good reason to use accumulator registers if you have a choice
+   </p>
+   <ul style="list-style-type:none;">
+    <li>
+     <p>
+       (also a good reason to take some time and study encodings of the x86 instructions.)
+     </p>
+    </li>
+   </ul>
+   <p>
+    &nbsp;
+   </p>
+  </li>
+ </ul>
+ <hr />
+
+
+<a id="X77_0260_opcode"></a>
+
+
+    <h3>
+        26. x86 Opcode Summary
+    </h3>
+ <hr />
+ <ul>
+  <li>
+   <p>
+    x86 opcodes are represented by one or two bytes.
+   </p>
+  </li>
+  <li>
+   <p>
+    Opcode could extend into unused bits of <strong>MOD-REG-R/M</strong> byte.
+   </p>
+  </li>
+  <li>
+   <p>
+    Opcode encodes information about
+   </p>
+   <ul>
+    <li>
+     <p>
+      operation type,
+     </p>
+    </li>
+    <li>
+     <p>
+      operands,
+     </p>
+    </li>
+    <li>
+     <p>
+      size of each operand, including the size of an immediate operand.
+     </p>
+    </li>
+   </ul>
+   <p>
+    &nbsp;
+   </p>
+   <p>
+    &nbsp;
+   </p>
+  </li>
+ </ul>
+ <hr />
+
+
+<a id="X77_0270_modrm_byte"></a>
+
+
+    <h3>
+        27. MOD-REG-R/M Byte Summary
+    </h3>
+ <hr />
+     <table border="0" cellspacing="0" cellpadding="2">
+         <tr>
+             <td valign="top">
+ <ul>
+  <li>
+   <p>
+    <strong>MOD-REG-R/M</strong> byte follows one or two opcode bytes of the
+    <a href="http://www.c-jump.com/CIS77/images/x86_instruction_format.png" target="_blank">instruction</a>
+   </p>
+  </li>
+  <li>
+   <p>
+    It provides <em>addressing mode</em> information for one or two operands.
+   </p>
+  </li>
+ </ul>
+             </td>
+             <td valign="top">
+ <ul style="list-style-type:none;">
+  <li>
+   <p>
+     MOD-REG-R/M Byte:
+   </p>
+   <p>
+    &nbsp;
+    <img src="http://www.c-jump.com/CIS77/images/mod_reg_r_m_byte.png" alt="MOD-REG-R/M Byte" />
+   </p>
+  </li>
+ </ul>
+             </td>
+         </tr>
+     </table>
+ <ul>
+  <li>
+   <p>
+    If operand is in <span style="color: blue">memory</span>, or operand is a <span style="color: blue">register</span>:
+   </p>
+   <ul>
+    <li>
+     <p>
+      <strong>MOD</strong> field (bits [7:6]), combined with the <strong>R/M</strong> field (bits [2:0]), specify <span style="color: blue">memory</span>/<span style="color: blue">register</span> operand, as well as its <em>addressing mode</em>.
+     </p>
+    </li>
+    <li>
+     <p>
+      <strong>REG</strong> field (bits [5:3]) specifies another <span style="color: blue">register</span> operand in of the two-operand instruction.
+     </p>
+    </li>
+   </ul>
+   <p>
+    &nbsp;
+   </p>
+  </li>
+ </ul>
+ <hr />
+
+
+<a id="X77_0280_design_considerations"></a>
+
+
+    <h3>
+        28. ISA Design Considerations
+    </h3>
+ <hr />
+ <ul>
+  <li>
+   <p>
+    Instruction set architecture design that can stand the test of time is a true intellectual challenge.
+   </p>
+  </li>
+  <li>
+   <p>
+    It takes several compromises between space and efficiency to assign opcodes and encode instruction formats.
+   </p>
+  </li>
+  <li>
+   <p>
+    Today people are using Intel x86 instruction set for purposes never intended by original designers.
+   </p>
+  </li>
+  <li>
+   <p>
+    Extending the CPU is a very difficult task.
+   </p>
+  </li>
+  <li>
+   <p>
+    The instruction set can become <em>extremely complex</em>.
+   </p>
+  </li>
+  <li>
+   <p>
+    If x86 CPU was designed <em>from scratch</em> today, it would have a totally different ISA!
+   </p>
+  </li>
+  <li>
+   <p>
+    Software developers usually don't have a problem adapting to a new architecture when writing new software...
+   </p>
+   <ul style="list-style-type:none;">
+    <li>
+     <p>
+       ...but they are very resistant to moving existing software from one platform to another.
+     </p>
+    </li>
+   </ul>
+  </li>
+  <li>
+   <p>
+    This is the primary reason the Intel x86 platform remains so popular to this day.
+   </p>
+   <p>
+    &nbsp;
+   </p>
+  </li>
+ </ul>
+ <hr />
+
+
+<a id="X77_0290_design_challenges"></a>
+
+
+    <h3>
+        29. ISA Design Challenges
+    </h3>
+ <hr />
+ <ul>
+  <li>
+   <p>
+    Allowing for future expansion of the chip requires some <em>undefined opcodes</em>.
+   </p>
+  </li>
+  <li>
+   <p>
+    From the beginning there should be a balance between the number of undefined opcodes and
+   </p>
+   <ol>
+    <li>
+     <p>
+       the number of initial instructions, and
+     </p>
+    </li>
+    <li>
+     <p>
+      the size of your opcodes (including special assignments.)
+     </p>
+    </li>
+   </ol>
+  </li>
+  <li>
+   <p>
+    Hard decisions:
+   </p>
+   <ul>
+    <li>
+     <p>
+      Reduce the number of instructions in the initial instruction set?
+     </p>
+    </li>
+    <li>
+     <p>
+      Increase the size of the opcode?
+     </p>
+    </li>
+    <li>
+     <p>
+      Rely on an opcode prefix byte(s), which makes later added instructions longer?
+     </p>
+    </li>
+   </ul>
+  </li>
+  <li>
+   <p>
+    There are no easy answers to these challenges for CPU designers!
+   </p>
+   <p>
+    &nbsp;
+   </p>
+   <p>
+    &nbsp;
+   </p>
+  </li>
+ </ul>
+ <hr />
+
+
+<a id="X77_0300_intel_manual"></a>
+
+
+    <h3>
+        30. Intel Architecture Software Developer's Manual
+    </h3>
+ <hr />
+ <ul style="list-style-type:none;">
+  <li>
+   <p>
+     Classic Intel Pentium II Architecture Software Developer's Manual contains three parts:
+   </p>
+   <ol>
+    <li>
+     <p>
+       &nbsp;
+      <noindex><a href="http://developer.intel.com/design/pentiumii/manuals/243190.htm" target="_blank">Volume 1</a></noindex>
+      , <em>Intel Basic Architecture</em>:
+      <noindex><a href="http://download.intel.com/design/PentiumII/manuals/24319002.PDF" target="_blank">Order Number 243190</a></noindex>
+      , PDF, 2.6 MB.
+     </p>
+    </li>
+    <li>
+     <p>
+      &nbsp;
+      <noindex><a href="http://developer.intel.com/design/pentiumii/manuals/243191.htm" target="_blank">Volume 2</a></noindex>
+      , <em>Instruction Set Reference</em>:
+      <noindex><a href="http://download.intel.com/design/PentiumII/manuals/24319102.PDF" target="_blank">Order Number 243191</a></noindex>
+      , PDF, 6.6 MB.
+     </p>
+    </li>
+    <li>
+     <p>
+      &nbsp;
+      <noindex><a href="http://developer.intel.com/design/pentiumii/manuals/243192.htm" target="_blank">Volume 3</a></noindex>
+      , <em>System Programing Guide</em>:
+      <noindex><a href="http://download.intel.com/design/PentiumII/manuals/24319202.pdf" target="_blank">Order Number 243192</a></noindex>
+      , PDF, 5.1 MB.
+     </p>
+    </li>
+   </ol>
+   <p>
+    &nbsp;
+   </p>
+  </li>
+  <li>
+   <p>
+    It is highly recommended that you download the above manuals and use them as a reference.
+   </p>
+   <p>
+    &nbsp;
+   </p>
+  </li>
+ </ul>
+ <hr />
+
+
+<a id="X77_0310_intel_manual_volume2"></a>
+
+
+    <h3>
+        31. Intel Instruction Set Reference (Volume2)
+    </h3>
+ <hr />
+ <ul>
+  <li>
+   <p>
+    <strong>Chapter 3</strong> of the
+    <noindex><a href="http://developer.intel.com/design/pentiumii/manuals/243191.htm" target="_blank">Instruction Set Reference</a></noindex>
+    describes
+   </p>
+   <ul>
+    <li>
+     <p>
+      each Intel instruction in detail
+     </p>
+    </li>
+    <li>
+     <p>
+      algorithmic description of each operation
+     </p>
+    </li>
+    <li>
+     <p>
+      effect on flags
+     </p>
+    </li>
+    <li>
+     <p>
+      operand(s), their sizes and attributes
+     </p>
+    </li>
+    <li>
+     <p>
+      CPU exceptions that may be generated.
+     </p>
+    </li>
+   </ul>
+  </li>
+  <li>
+   <p>
+    The instructions are arranged in alphabetical order.
+   </p>
+  </li>
+  <li>
+   <p>
+    <strong>Appendix A</strong> provides <em>opcode map</em> for the entire Intel Architecture instruction set.
+   </p>
+   <p>
+    &nbsp;
+   </p>
+  </li>
+ </ul>
+ <hr />
+
+
+<a id="X77_0320_intel_manual_chapter3"></a>
+
+
+    <h3>
+        32. Chapter 3 of Intel Instruction Set Reference
+    </h3>
+ <hr />
+ <ul>
+  <li>
+   <p>
+    <strong>Chapter 3</strong> begins with instruction format example and explains the <strong>Opcode</strong> column encoding.
+   </p>
+  </li>
+  <li>
+   <p>
+    The <strong>Opcode</strong> column gives the <em>complete machine codes</em> as it is understood by the CPU.
+   </p>
+  </li>
+  <li>
+   <p>
+    When possible, the actual <em>machine code bytes</em> are given as exact hexadecimal bytes, in the same order in which they appear in memory.
+   </p>
+  </li>
+  <li>
+   <p>
+    However, there are opcode definitions other than hexadecimal bytes...
+   </p>
+   <p>
+    &nbsp;
+   </p>
+  </li>
+ </ul>
+ <hr />
+
+
+<a id="X77_0330_intel_manual_opcode_bytes"></a>
+
+
+    <h3>
+        33. Intel Reference Opcode Bytes
+    </h3>
+ <hr />
+ <ul style="list-style-type:none;">
+  <li>
+   <p>
+     Fow example,
+   </p>
+   <p>
+    &nbsp;
+    <img src="http://www.c-jump.com/CIS77/asm_images/intel_inc.png" alt="INC instruction reference page" />
+   </p>
+   <p>
+    &nbsp;
+   </p>
+  </li>
+ </ul>
+ <hr />
+
+
+<a id="X77_0340_intel_manual_opcode_bytes_cont"></a>
+
+
+    <h3>
+        34. Intel Reference Opcode Bytes, Cont.
+    </h3>
+ <hr />
+ <ul>
+  <li>
+   <p>
+    <tt>/digit</tt> - A digit between 0 and 7 indicates that
+   </p>
+   <ul>
+    <li>
+     <p>
+      The <strong>reg</strong> field of <strong>Mod R/M</strong> byte contains the instruction opcode extension.
+     </p>
+    </li>
+    <li>
+     <p>
+      The <strong>r/m</strong> (register or memory) operand of <strong>Mod R/M</strong> byte indicates
+     </p>
+    </li>
+   </ul>
+<pre>    R/M Addressing Mode
+    === ===========================
+    000 register ( al / ax / eax )
+    001 register ( cl / cx / ecx )
+    010 register ( dl / dx / edx )
+    011 register ( bl / bx / ebx )
+    100 register ( ah / sp / esp )
+    101 register ( ch / bp / ebp )
+    110 register ( dh / si / esi )
+    111 register ( bh / di / edi )
+</pre>
+  </li>
+  <li>
+   <p>
+    The size bit in the opcode specifies 8 or 32-bit register size.
+   </p>
+  </li>
+  <li>
+   <p>
+    A 16-bit register requires a prefix byte:
+   </p>
+<pre>    Opcode     Instruction
+    --------   ------------
+    41h        <span style="color: blue">INC</span> ECX
+    66h 41h    <span style="color: blue">INC</span> CX
+</pre>
+   <p>
+    &nbsp;
+   </p>
+  </li>
+ </ul>
+ <hr />
+
+
+<a id="X77_0350_intel_manual_opcode_bytes_cont"></a>
+
+
+    <h3>
+        35. Intel Reference Opcode Bytes, Cont.
+    </h3>
+ <hr />
+ <ul>
+  <li>
+   <p>
+    <tt>/r</tt> - Indicates that the instruction uses the <strong>Mod R/M</strong> byte of the instruction.
+   </p>
+  </li>
+  <li>
+   <p>
+    <strong>Mod R/M</strong> byte contains both
+   </p>
+   <ul>
+    <li>
+     <p>
+      a register operand <strong>reg</strong> and
+     </p>
+    </li>
+    <li>
+     <p>
+      an <strong>r/m</strong> (register or memory) operand.
+     </p>
+    </li>
+   </ul>
+   <p>
+    &nbsp;
+   </p>
+  </li>
+ </ul>
+ <hr />
+
+
+<a id="X77_0360_intel_manual_opcode_bytes_cont"></a>
+
+
+    <h3>
+        36. Intel Reference Opcode Bytes, Cont.
+    </h3>
+ <hr />
+ <ul>
+  <li>
+   <p>
+    <tt>cb, cw, cd, cp</tt> - A 1-byte (cb), 2-byte (cw), 4-byte (cd), or 6-byte (cp) value,
+    <br />
+    following the opcode, is used to specify
+   </p>
+   <ul>
+    <li>
+     <p>
+      a <em>code offset</em>,
+     </p>
+    </li>
+    <li>
+     <p>
+      and possibly a new value for the code segment register <span style="color: blue">CS</span>.
+     </p>
+    </li>
+   </ul>
+   <p>
+    &nbsp;
+   </p>
+  </li>
+ </ul>
+ <hr />
+
+
+<a id="X77_0370_intel_manual_opcode_bytes_cont"></a>
+
+
+    <h3>
+        37. Intel Reference Opcode Bytes, Cont.
+    </h3>
+ <hr />
+ <ul>
+  <li>
+   <p>
+    <tt>ib, iw, id</tt> - A 1-byte (ib), 2-byte (iw), or 4-byte (id) indicates presence of the <strong>immediate operand</strong> in the instruction.
+   </p>
+  </li>
+  <li>
+   <p>
+    Typical order of opcode bytes is
+   </p>
+   <ul>
+    <li>
+     <p>
+      <strong>opcode</strong>
+     </p>
+    </li>
+    <li>
+     <p>
+      <strong>Mod R/M</strong> byte (optional)
+     </p>
+    </li>
+    <li>
+     <p>
+      <strong>SIB</strong> scale-indexing byte (optional)
+     </p>
+    </li>
+    <li>
+     <p>
+      <strong>immediate operand</strong>.
+     </p>
+    </li>
+   </ul>
+  </li>
+  <li>
+   <p>
+    The opcode determines if the operand is a signed value.
+   </p>
+  </li>
+  <li>
+   <p>
+    All words and doublewords are given with the low-order byte first (little endian).
+   </p>
+   <p>
+    &nbsp;
+   </p>
+  </li>
+ </ul>
+ <hr />
+
+
+<a id="X77_0380_intel_manual_opcode_bytes_cont"></a>
+
+
+    <h3>
+        38. Intel Reference Opcode Bytes, Cont.
+    </h3>
+ <hr />
+ <ul>
+  <li>
+   <p>
+    <tt>+rb, +rw, +rd</tt> - A register code, from 0 through 7, added to the hexadecimal byte given at
+    the left of the plus sign to form a single opcode byte.
+   </p>
+  </li>
+  <li>
+   <p>
+    Register Encodings Associated with the <strong>+rb</strong>, <strong>+rw</strong>, and <strong>+rd</strong>:
+   </p>
+   <p>
+    &nbsp;
+    <img src="http://www.c-jump.com/CIS77/asm_images/intel_rb_rw_rd.png" alt="Register Encodings Associated with the +rb, +rw, and +rd" />
+   </p>
+   <p>
+    For example,
+   </p>
+   <p>
+    &nbsp;
+    <img src="http://www.c-jump.com/CIS77/asm_images/intel_inc.png" alt="INC instruction reference page" />
+   </p>
+   <p>
+    &nbsp;
+   </p>
+  </li>
+ </ul>
+ <hr />
+
+
+<a id="X77_0390_intel_manual_instruction_column"></a>
+
+
+    <h3>
+        39. Intel Reference Instruction Column
+    </h3>
+ <hr />
+ <ul>
+  <li>
+   <p>
+    The <strong>Instruction</strong> column gives the syntax of the instruction statement as it would appear in a
+    386 Assembly program.
+   </p>
+  </li>
+  <li>
+   <p>
+    For example,
+   </p>
+   <p>
+    &nbsp;
+    <img src="http://www.c-jump.com/CIS77/asm_images/intel_inc.png" alt="INC instruction reference page" />
+   </p>
+   <p>
+    &nbsp;
+   </p>
+  </li>
+ </ul>
+ <hr />
+
+
+    </body>
+</html>
+

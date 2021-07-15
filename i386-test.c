@@ -23,15 +23,6 @@ static inline void finish(void)
 void test()
 {
   print();
-  AAA();
-  AAD();
-  AAM();
-  ADDPD();
-  ADDPS();
-  ADDSD();
-  ADDSS();
-  ADDSUBPD();
-  ARPL();
-  BLENDVPD();
+  BOUND();
   finish();
 }

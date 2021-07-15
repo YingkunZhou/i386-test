@@ -191,7 +191,7 @@ void AND(void)
   __asm__ __volatile__(
       MOV_($0xffffffff, %%eax)
       AND_($0xf, %%eax)
-      :::"eax", "edx");
+      :::"eax");
 }
 
 void ANDN(void)
@@ -327,6 +327,9 @@ void BNDSTX(void)
 
 void BOUND(void)
 {
+  __asm__ __volatile__(
+      BOUND_((%esp), ebp)
+      );
 }
 
 void BSF(void)

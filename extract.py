@@ -15,12 +15,13 @@ for l in lines:
                 output += ' '.join(w[1:]) + '\n'
             else:
                 t = w[-1].split(',')
-                if ('ND' not in t) and ('PRIV' not in t) and ('NOLONG' not in t):
-                    if len(w) > 3:
-                        t = w[2].split(',')
-                        for tt in t:
-                            Toperand.add(tt)
-                    output += ' '.join(w[1:-1]) + '\n'
+                if 'ND' in t or 'PRIV' in t or 'NOLONG' in t:
+                    pass
+                elif len(w) > 3:
+                    t = w[2].split(',')
+                    for tt in t:
+                        Toperand.add(tt)
+                output += ' '.join(w[1:-1]) + '\n'
 
 f = open('inslist.md', 'w')
 f.write(output)

@@ -1,20 +1,17 @@
 ; bndreg = bnd0,bnd1,bnd2
 ; fpu0 = st0
 ; fpureg = st1,st2,st3
-; fpureg|to
-; imm
-; imm16
-; imm32
-; imm64
-; imm64|near
-; imm8
-; imm:imm
+; imm = 31
+; imm8 = 0x7c
+; imm16 = 0x7ff0
+; imm32 = 0x7ffff000
+; imm64 = 0x7ffffffffffff000
 ; imm|near
 ; imm|short
-; kreg
-; kreg|mask
-; kreg|rs2
-; mem
+; imm64|near
+; kreg = k1
+; kreg|mask = k2{k1}
+; mem = [ebp]
 ; mem128
 ; mem128|mask
 ; mem16
@@ -129,26 +126,6 @@
 ; zmmrm512|b64|er
 ; zmmrm512|b64|sae
 ; zmmrm512|mask|z
-
-\S{} Special instructions (pseudo-ops)
-
-\c DB                                        
-\c DW                                        
-\c DD                                        
-\c DQ                                        
-\c DT                                        
-\c DO                                        
-\c DY                                        
-\c DZ                                        
-\c RESB             imm                      8086
-\c RESW             imm                      8086
-\c RESD             imm                      8086
-\c RESQ             imm                      8086
-\c REST             imm                      8086
-\c RESO             imm                      8086
-\c RESY             imm                      8086
-\c RESZ             imm                      8086
-\c INCBIN                                    
 
 \S{} Conventional instructions
 
@@ -448,14 +425,12 @@
 \c DMINT                                     P6,CYRIX
 \c EMMS                                      PENT,MMX
 \c ENTER            imm,imm                  186
-\c EQU              imm                      8086
-\c EQU              imm:imm                  8086
 \c F2XM1                                     8086,FPU
 \c FABS                                      8086,FPU
 \c FADD             mem32                    8086,FPU
 \c FADD             mem64                    8086,FPU
-\c FADD             fpureg|to                8086,FPU
-\c FADD             fpureg                   8086,FPU
+\c FADD             fpureg|to                8086,FPU,ND
+\c FADD             fpureg                   8086,FPU,ND
 \c FADD             fpureg,fpu0              8086,FPU
 \c FADD             fpu0,fpureg              8086,FPU
 \c FADD                                      8086,FPU,ND
@@ -514,8 +489,8 @@
 \c FDISI                                     8086,FPU
 \c FDIV             mem32                    8086,FPU
 \c FDIV             mem64                    8086,FPU
-\c FDIV             fpureg|to                8086,FPU
-\c FDIV             fpureg                   8086,FPU
+\c FDIV             fpureg|to                8086,FPU,ND
+\c FDIV             fpureg                   8086,FPU,ND
 \c FDIV             fpureg,fpu0              8086,FPU
 \c FDIV             fpu0,fpureg              8086,FPU
 \c FDIV                                      8086,FPU,ND
@@ -524,9 +499,9 @@
 \c FDIVP                                     8086,FPU,ND
 \c FDIVR            mem32                    8086,FPU
 \c FDIVR            mem64                    8086,FPU
-\c FDIVR            fpureg|to                8086,FPU
+\c FDIVR            fpureg|to                8086,FPU,ND
 \c FDIVR            fpureg,fpu0              8086,FPU
-\c FDIVR            fpureg                   8086,FPU
+\c FDIVR            fpureg                   8086,FPU,ND
 \c FDIVR            fpu0,fpureg              8086,FPU
 \c FDIVR                                     8086,FPU,ND
 \c FDIVRP           fpureg                   8086,FPU
@@ -583,9 +558,9 @@
 \c FLDZ                                      8086,FPU
 \c FMUL             mem32                    8086,FPU
 \c FMUL             mem64                    8086,FPU
-\c FMUL             fpureg|to                8086,FPU
+\c FMUL             fpureg|to                8086,FPU,ND
 \c FMUL             fpureg,fpu0              8086,FPU
-\c FMUL             fpureg                   8086,FPU
+\c FMUL             fpureg                   8086,FPU,ND
 \c FMUL             fpu0,fpureg              8086,FPU
 \c FMUL                                      8086,FPU,ND
 \c FMULP            fpureg                   8086,FPU
@@ -630,7 +605,7 @@
 \c FSUB             mem64                    8086,FPU
 \c FSUB             fpureg|to                8086,FPU,ND
 \c FSUB             fpureg,fpu0              8086,FPU
-\c FSUB             fpureg                   8086,FPU
+\c FSUB             fpureg                   8086,FPU,ND
 \c FSUB             fpu0,fpureg              8086,FPU
 \c FSUB                                      8086,FPU,ND
 \c FSUBP            fpureg                   8086,FPU
@@ -6037,12 +6012,6 @@
 \c VDPBF16PS        xmmreg|mask|z,xmmreg*,xmmrm128|b32 AVX512BF16
 \c VDPBF16PS        ymmreg|mask|z,ymmreg*,ymmrm128|b32 AVX512BF16
 \c VDPBF16PS        zmmreg|mask|z,zmmreg*,zmmrm128|b32 AVX512BF16
-
-\S{} AVX512 mask intersect instructions
-
-\c VP2INTERSECTD    kreg|rs2,xmmreg,xmmrm128|b32 AVX512BF16
-\c VP2INTERSECTD    kreg|rs2,ymmreg,ymmrm128|b32 AVX512BF16
-\c VP2INTERSECTD    kreg|rs2,zmmreg,zmmrm128|b32 AVX512BF16
 
 \S{} Intel Advanced Matrix Extensions (AMX)
 

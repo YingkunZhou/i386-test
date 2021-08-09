@@ -628,7 +628,7 @@
 \c FSTSW            reg_ax                   286,FPU
 \c FSUB             mem32                    8086,FPU
 \c FSUB             mem64                    8086,FPU
-\c FSUB             fpureg|to                8086,FPU
+\c FSUB             fpureg|to                8086,FPU,ND
 \c FSUB             fpureg,fpu0              8086,FPU
 \c FSUB             fpureg                   8086,FPU
 \c FSUB             fpu0,fpureg              8086,FPU
@@ -638,9 +638,9 @@
 \c FSUBP                                     8086,FPU,ND
 \c FSUBR            mem32                    8086,FPU
 \c FSUBR            mem64                    8086,FPU
-\c FSUBR            fpureg|to                8086,FPU
+\c FSUBR            fpureg|to                8086,FPU,ND
 \c FSUBR            fpureg,fpu0              8086,FPU
-\c FSUBR            fpureg                   8086,FPU
+\c FSUBR            fpureg                   8086,FPU,ND
 \c FSUBR            fpu0,fpureg              8086,FPU
 \c FSUBR                                     8086,FPU,ND
 \c FSUBRP           fpureg                   8086,FPU

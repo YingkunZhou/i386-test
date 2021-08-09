@@ -1,3 +1,7 @@
+%define IMM8 0xff
+%define IMM16 0xffff
+%define IMM32 0xffffffff
+
 default rel
 global    _start
 section   .text
@@ -98,6 +102,44 @@ FLD0:
 MMX0:
   movq [ebp], mm0
 
+MOV0:
+  mov byte [l1] ,1
+
+MOV1:
+  mov word [l1], 1
+
+MOV2:
+  mov dword [l1], 1
+
+MOV3:
+  mov [l1], eax
+
+MOV4:
+  mov [l1], ax
+
+MOV5:
+  mov [l1], al
+
+MOV6:
+  mov eax, [l1]
+
+MOV7:
+  mov ax, [l1]
+
+MOV8:
+  mov eax, 12
+
+MOV9:
+  mov ax, 12
+
+MOV10:
+  mov al, 12
+
+MOV11:
+  mov ah, 12
+
+
+
 
 _start:
   mov       rax, 0x2000004          ; system call for write
@@ -115,4 +157,6 @@ section   .data
  msg:     db        "Hello World!", 10      ; note the newline at the end
 .len:     equ        $ - msg
 
- x:  dd 1.5
+ l0: dd 1.5
+ l1: db 00h, 04Fh, 012h, 0A4h
+ l2: db 00h, 04Fh, 012h, 0A4h

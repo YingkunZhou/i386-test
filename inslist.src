@@ -1,6 +1,6 @@
-; bndreg = bnd0,bnd1,bnd2
+; bndreg = (bnd0,bnd1,bnd2)
 ; fpu0 = st0
-; fpureg = st1,st2,st3
+; fpureg = (st1,st2,st3)
 ; imm = 31
 ; imm8 = 0x7c
 ; imm16 = 0x7ff0
@@ -11,7 +11,7 @@
 ; imm64|near = near forward
 ; kreg = k1
 ; kreg|mask = k2{k1}
-; mem = [ebp]
+; mem = [rbp]
 ; mem8 = byte [rbp]
 ; mem16 = word [rbp]
 ; mem32 = dword [rbp]
@@ -30,14 +30,14 @@
 ; mem256|mask = yword [rcx]{k7}
 ; mem512|mask = zword [rcx]{k7}
 ; mem|far = far [rax]
-; mmxreg = mm0,mm1,mm2
+; mmxreg = (mm0,mm1,mm2)
 ; mmxrm = [rbp]
 ; mmxrm64 = qword [rdi]
-; reg8 = dl,al
-; reg16 = dx,ax
-; reg32 = edx,eax
+; reg8 = (dl,al)
+; reg16 = (dx,ax)
+; reg32 = (edx,eax)
 ; reg32na = edx
-; reg64 = rdx,rax
+; reg64 = (rdx,rax)
 ; reg_al = al
 ; reg_ax = ax
 ; reg_cl = cl
@@ -53,78 +53,78 @@
 ; rm16 = word [rdi]
 ; rm32 = dword [rdi]
 ; rm64 = qword [rdi]
-; tmmreg = tmm0,tmm1,tmm2
+; tmmreg = (tmm0,tmm1,tmm2)
 ; unity = 1
 ; xmem32 = dword [xmm4*1+0x298]
 ; xmem32|mask = dword [ebp+xmm7*2+0x0]{k1}
 ; xmem64 = qword [xmm4*1+0x298]
 ; xmem64|mask = qword [xmm4*1+0x298]{k1}
 ; xmm0 = xmm0
-; xmmreg = xmm1,xmm2,xmm3
+; xmmreg = (xmm1,xmm2,xmm3)
 ; xmmreg* = xmm29
-; xmmreg|er
-; xmmreg|mask
-; xmmreg|mask|z
-; xmmrm
-; xmmrm128
-; xmmrm128*
-; xmmrm128|b32
-; xmmrm128|b32*
-; xmmrm128|b64
-; xmmrm128|b64*
+; xmmreg|er = xmm29
+; xmmreg|mask = xmm30{k7}
+; xmmreg|mask|z = xmm30{k7}{z}
+; xmmrm = [rdi],xmm0
+; xmmrm8 = byte [ecx]
+; xmmrm16 = word [ecx]
+; xmmrm32 = dword [ecx]
+; xmmrm32* = dword [ecx]
+; xmmrm32|er = xmm28,{rn-sae}
+; xmmrm32|sae = xmm29,{sae}
+; xmmrm64 = qword [ecx]
+; xmmrm64* = qword [ecx]
+; xmmrm64|b32 = qword [ecx]
+; xmmrm64|er = qword [ecx]
+; xmmrm64|sae = qword [ecx]
+; xmmrm128 = xmm4
+; xmmrm128* = xmm5
+; xmmrm128|b32 = oword [rcx]
+; xmmrm128|b32* = oword [rcx]
+; xmmrm128|b64 = xmm20
+; xmmrm128|b64* = xmm21
 ; xmmrm128|mask|z = xmm30{k7}{z}
-; xmmrm16
-; xmmrm32
-; xmmrm32*
-; xmmrm32|er
-; xmmrm32|sae
-; xmmrm64
-; xmmrm64*
-; xmmrm64|b32
-; xmmrm64|er
-; xmmrm64|sae
-; xmmrm8
-; ymem32
-; ymem32|mask
-; ymem64
-; ymem64|mask
-; ymmreg
-; ymmreg*
-; ymmreg|mask
-; ymmreg|mask|z
-; ymmrm128|b32
-; ymmrm256
-; ymmrm256*
-; ymmrm256|b32
-; ymmrm256|b32*
-; ymmrm256|b32|er
-; ymmrm256|b32|sae
-; ymmrm256|b64
-; ymmrm256|b64*
-; ymmrm256|mask|z
-; ymmrm256|sae
-; zmem32
-; zmem32|mask
-; zmem64
-; zmem64|mask
-; zmmreg
-; zmmreg*
-; zmmreg|mask
-; zmmreg|mask|z
-; zmmreg|rs4
-; zmmreg|sae
-; zmmrm128|b32
-; zmmrm512
-; zmmrm512*
-; zmmrm512|b32
-; zmmrm512|b32*
-; zmmrm512|b32|er
-; zmmrm512|b32|sae
-; zmmrm512|b64
-; zmmrm512|b64*
-; zmmrm512|b64|er
-; zmmrm512|b64|sae
-; zmmrm512|mask|z
+; ymem32 = dword [ymm4*1+0x100]
+; ymem32|mask = dword [ymm4*1+0x100]{k1}
+; ymem64 = qword [ymm4*1+0x100]
+; ymem64|mask = qword [ymm4*1+0x100]
+; ymmreg = (ymm1,ymm2,ymm3)
+; ymmreg* = ymm29
+; ymmreg|mask = ymm30{k7}
+; ymmreg|mask|z = ymm30{k7}{z}
+; ymmrm128|b32 = oword [rcx]
+; ymmrm256 = yword [rdi]
+; ymmrm256* = yword [rdi]
+; ymmrm256|b32 = yword [rcx]
+; ymmrm256|b32* = yword [rcx]
+; ymmrm256|b32|er = dword [rdx+0x1fc]{1to8}
+; ymmrm256|b32|sae = ymm28
+; ymmrm256|b64 = ymm4
+; ymmrm256|b64* = ymm5
+; ymmrm256|mask|z = ymm30{k7}{z}
+; ymmrm256|sae = ymm29,{sae}
+; zmem32 = dword [zmm4*1+0x100]
+; zmem32|mask = dword [zmm*1+0x100]{k1}
+; zmem64 = qword [zmm4*1+0x100]
+; zmem64|mask = qword [zmm4*1+0x100]{k1}
+; zmmreg = (zmm1,zmm2,zmm3)
+; zmmreg* = zmm29
+; zmmreg|mask = zmm28{k1}
+; zmmreg|mask|z = zmm27{k7}{z}
+; zmmreg|rs4 = zmm1+3
+; zmmreg|sae = zmm27,{sae}
+; zmmrm128|b32 = oword [rcx]
+; zmmrm512 = zword [rdi]
+; zmmrm512* = zword [rdi]
+; zmmrm512|b32 = zword [rcx]
+; zmmrm512|b32* = zword [rcx]
+; zmmrm512|b32|er = dword [rcx]{1to8}
+; zmmrm512|b32|sae = zmm29
+; zmmrm512|b64 = zmm4
+; zmmrm512|b64* = zmm5
+; zmmrm512|b64|er = [rax]{1to16}
+; zmmrm512|b64|sae = zmm26
+; zmmrm512|mask|z = [rsi]{z}{1to16}
 
 \S{} Conventional instructions
 

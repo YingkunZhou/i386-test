@@ -6,63 +6,62 @@
 ; imm16 = 0x7ff0
 ; imm32 = 0x7ffff000
 ; imm64 = 0x7ffffffffffff000
-; imm|near
-; imm|short
-; imm64|near
+; imm|near = near forward
+; imm|short = short forward
+; imm64|near = near forward
 ; kreg = k1
 ; kreg|mask = k2{k1}
 ; mem = [ebp]
-; mem128
-; mem128|mask
-; mem16
-; mem16|far
-; mem16|mask
-; mem256
-; mem256|mask
-; mem32
-; mem32|far
-; mem32|mask
-; mem512
-; mem512|mask
-; mem64
-; mem64|far
-; mem64|mask
-; mem8
-; mem80
-; mem_offs
-; mem|far
-; mmxreg
-; mmxrm
-; mmxrm64
-; reg8
-; reg16
-; reg32
-; reg32na
-; reg64
-; reg_al
-; reg_ax
-; reg_cl
-; reg_dx
-; reg_eax
-; reg_ecx
-; reg_fs
-; reg_gs
-; reg_rax
-; reg_rcx
+; mem8 = byte [rbp]
+; mem16 = word [rbp]
+; mem32 = dword [rbp]
+; mem64 = qword [rbp]
+; mem80 = tword [rbp]
+; mem128 = oword [rbp]
+; mem256 = yword [rbp]
+; mem512 = zword [rbp]
+; mem16|far = far word [rbp]
+; mem32|far = far dword [rbp]
+; mem64|far = far qword [rbp]
+; mem16|mask = word [rcx]{k7}
+; mem32|mask = dword [rcx]{k7}
+; mem64|mask = qword [rcx]{k7}
+; mem128|mask = oword [rcx]{k7}
+; mem256|mask = yword [rcx]{k7}
+; mem512|mask = zword [rcx]{k7}
+; mem|far = far [rax]
+; mmxreg = mm0,mm1,mm2
+; mmxrm = [rbp]
+; mmxrm64 = qword [rdi]
+; reg8 = dl,al
+; reg16 = dx,ax
+; reg32 = edx,eax
+; reg32na = edx
+; reg64 = rdx,rax
+; reg_al = al
+; reg_ax = ax
+; reg_cl = cl
+; reg_dx = dx
+; reg_eax = eax
+; reg_ecx = ecx
+; reg_fs = fs
+; reg_gs = gs
+; reg_rax = rax
+; reg_rcx = rcx
 ; reg_sreg = ss
-; rm8
-; rm16
-; rm32
-; rm64
+; rm8 = byte [rdi]
+; rm16 = word [rdi]
+; rm32 = dword [rdi]
+; rm64 = qword [rdi]
 ; tmmreg = tmm0,tmm1,tmm2
 ; unity = 1
-; xmem32
-; xmem32|mask
-; xmem64
-; xmem64|mask
-; xmm0
-; xmmreg
-; xmmreg*
+; xmem32 = dword [xmm4*1+0x298]
+; xmem32|mask = dword [ebp+xmm7*2+0x0]{k1}
+; xmem64 = qword [xmm4*1+0x298]
+; xmem64|mask = qword [xmm4*1+0x298]{k1}
+; xmm0 = xmm0
+; xmmreg = xmm1,xmm2,xmm3
+; xmmreg* = xmm29
 ; xmmreg|er
 ; xmmreg|mask
 ; xmmreg|mask|z
@@ -73,7 +72,7 @@
 ; xmmrm128|b32*
 ; xmmrm128|b64
 ; xmmrm128|b64*
-; xmmrm128|mask|z
+; xmmrm128|mask|z = xmm30{k7}{z}
 ; xmmrm16
 ; xmmrm32
 ; xmmrm32*
@@ -874,14 +873,14 @@
 \c MOV              reg_sreg,reg16           8086
 \c MOV              reg_sreg,reg32           386
 \c MOV              reg_sreg,rm64            X86_64,LONG
-\c MOV              reg_al,mem_offs          8086
-\c MOV              reg_ax,mem_offs          8086
-\c MOV              reg_eax,mem_offs         386
-\c MOV              reg_rax,mem_offs         X86_64,LONG
-\c MOV              mem_offs,reg_al          8086,NOHLE
-\c MOV              mem_offs,reg_ax          8086,NOHLE
-\c MOV              mem_offs,reg_eax         386,NOHLE
-\c MOV              mem_offs,reg_rax         X86_64,LONG,NOHLE
+\c MOV              reg_al,mem_offs          8086,ND
+\c MOV              reg_ax,mem_offs          8086,ND
+\c MOV              reg_eax,mem_offs         386,ND
+\c MOV              reg_rax,mem_offs         X86_64,LONG,ND
+\c MOV              mem_offs,reg_al          8086,NOHLE,ND
+\c MOV              mem_offs,reg_ax          8086,NOHLE,ND
+\c MOV              mem_offs,reg_eax         386,NOHLE,ND
+\c MOV              mem_offs,reg_rax         X86_64,LONG,NOHLE,ND
 \c MOV              reg32,reg_creg           386,PRIV,NOLONG
 \c MOV              reg64,reg_creg           X86_64,LONG,PRIV
 \c MOV              reg_creg,reg32           386,PRIV,NOLONG

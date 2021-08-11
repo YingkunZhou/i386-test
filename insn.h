@@ -69,7 +69,7 @@ void CLI(void);
 void CLRSSBSY(void);
 void CLWB(void);
 void CMC(void);
-//A AE B BE C E G GE L LE NA NAE NB NBE NC NE NG NGE NL NLE NO NP NS NZ O P PE
+//A AE B BE C E G GE L LE NA NAE NB NBE NC NE NG NGE NL NLE NO NP NS NZ O P PE PO S Z
 void CMOVcc(void);
 void CMP(void);
 void CMPPD(void);
@@ -232,7 +232,7 @@ void INT_imm8(void);
 void INTO(void);
 void INT3(void);
 void INT1(void);
-//A AE B BE C CXZ ECXZ RCXZ E G GE L LE NA NAE NB NBE NC NE NG NGE NL NLE NO NP NS NZ O P PE PO S Z A AE B BE C E Z G GE why???
+//A AE B BE C E G GE L LE NA NAE NB NBE NC NE NG NGE NL NLE NO NP NS NZ O P PE PO S Z
 void Jcc(void);
 void JMP(void);
 void LAHF(void);

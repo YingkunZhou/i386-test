@@ -2,15 +2,19 @@
 ; fpu0 = st0
 ; fpureg = (st1,st2,st3)
 ; imm = 31
-; imm8 = 0x7c
-; imm16 = 0x7ff0
-; imm32 = 0x7ffff000
-; imm64 = 0x7ffffffffffff000
-; imm|near = near forward
-; imm|short = short forward
-; imm64|near = near forward
-; kreg = k1
+; imm8 = byte 0x7c
+; imm16 = word 0x7ff0
+; imm32 = dword 0x7ffff000
+; imm64 = qword 0x7ffffffffffff000
+; imm|near = near _start
+; imm|short = short _start
+; imm64|near = near _start
+; kreg = (k1,k2,k3)
 ; kreg|mask = k2{k1}
+; krm8 = byte [rbp]
+; krm16 = word [rbp]
+; krm32 = dword [rbp]
+; krm64 = qword [rbp]
 ; mem = [rbp]
 ; mem8 = byte [rbp]
 ; mem16 = word [rbp]
@@ -61,11 +65,11 @@
 ; xmem64|mask = qword [xmm4*1+0x298]{k1}
 ; xmm0 = xmm0
 ; xmmreg = (xmm1,xmm2,xmm3)
-; xmmreg* = xmm29
-; xmmreg|er = xmm29
+; xmmreg* = xmm9
+; xmmreg|er = xmm9
 ; xmmreg|mask = xmm30{k7}
 ; xmmreg|mask|z = xmm30{k7}{z}
-; xmmrm = [rdi],xmm0
+; xmmrm = ([rdi],xmm0)
 ; xmmrm8 = byte [ecx]
 ; xmmrm16 = word [ecx]
 ; xmmrm32 = dword [ecx]
@@ -81,15 +85,15 @@
 ; xmmrm128* = xmm5
 ; xmmrm128|b32 = oword [rcx]
 ; xmmrm128|b32* = oword [rcx]
-; xmmrm128|b64 = xmm20
-; xmmrm128|b64* = xmm21
+; xmmrm128|b64 = xmm8
+; xmmrm128|b64* = xmm9
 ; xmmrm128|mask|z = xmm30{k7}{z}
 ; ymem32 = dword [ymm4*1+0x100]
 ; ymem32|mask = dword [ymm4*1+0x100]{k1}
 ; ymem64 = qword [ymm4*1+0x100]
 ; ymem64|mask = qword [ymm4*1+0x100]
 ; ymmreg = (ymm1,ymm2,ymm3)
-; ymmreg* = ymm29
+; ymmreg* = ymm9
 ; ymmreg|mask = ymm30{k7}
 ; ymmreg|mask|z = ymm30{k7}{z}
 ; ymmrm128|b32 = oword [rcx]
@@ -104,13 +108,13 @@
 ; ymmrm256|mask|z = ymm30{k7}{z}
 ; ymmrm256|sae = ymm29,{sae}
 ; zmem32 = dword [zmm4*1+0x100]
-; zmem32|mask = dword [zmm*1+0x100]{k1}
+; zmem32|mask = dword [zmm4*1+0x100]{k1}
 ; zmem64 = qword [zmm4*1+0x100]
 ; zmem64|mask = qword [zmm4*1+0x100]{k1}
 ; zmmreg = (zmm1,zmm2,zmm3)
-; zmmreg* = zmm29
+; zmmreg* = zmm9
 ; zmmreg|mask = zmm28{k1}
-; zmmreg|mask|z = zmm27{k7}{z}
+; zmmreg|mask|z = zmm0
 ; zmmreg|rs4 = zmm1+3
 ; zmmreg|sae = zmm27,{sae}
 ; zmmrm128|b32 = oword [rcx]
@@ -118,13 +122,14 @@
 ; zmmrm512* = zword [rdi]
 ; zmmrm512|b32 = zword [rcx]
 ; zmmrm512|b32* = zword [rcx]
-; zmmrm512|b32|er = dword [rcx]{1to8}
+; zmmrm512|b32|er = zmm9
 ; zmmrm512|b32|sae = zmm29
 ; zmmrm512|b64 = zmm4
 ; zmmrm512|b64* = zmm5
-; zmmrm512|b64|er = [rax]{1to16}
-; zmmrm512|b64|sae = zmm26
-; zmmrm512|mask|z = [rsi]{z}{1to16}
+; zmmrm512|b64|er = zmm6
+; zmmrm512|b64|sae = zmm7
+; zmmrm512|mask|z = zmm8
+; cc = (A,AE,B,BE,C,E,G,GE,L,LE,NA,NAE,NB,NBE,NC,NE,NG,NGE,NL,NLE,NO,NP,NS,NZ,O,P,PE,PO,S,Z)
 
 \S{} Conventional instructions
 
@@ -1228,8 +1233,8 @@
 \c ROR              rm64,reg_cl              X86_64,LONG
 \c ROR              rm64,imm8                X86_64,LONG
 \c RDM                                       P6,CYRIX,ND
-; RSDC: Restore Segment Register and Descriptor
-; RSDC restores a segment register (DS, ES, FS, GS, or SS) from mem80, and sets up its descriptor.
+; # RSDC: Restore Segment Register and Descriptor
+; # RSDC restores a segment register (DS, ES, FS, GS, or SS) from mem80, and sets up its descriptor.
 \c RSDC             reg_sreg,mem80           486,CYRIX,SMM
 \c RSLDT            mem80                    486,CYRIX,SMM
 \c RSM                                       PENT,SMM
@@ -1420,8 +1425,8 @@
 \c SUB              mem,sbytedword32         386,LOCK,ND
 \c SUB              mem,imm32                386,LOCK
 \c SUB              rm8,imm                  8086,LOCK,ND,NOLONG
-; Save Segment Register and Descriptor
-; SVDC saves a segment register (DS, ES, FS, GS, or SS) and its descriptor to mem80
+; # Save Segment Register and Descriptor
+; # SVDC saves a segment register (DS, ES, FS, GS, or SS) and its descriptor to mem80
 \c SVDC             mem80,reg_sreg           486,CYRIX,SMM
 \c SVLDT            mem80                    486,CYRIX,SMM,ND
 \c SVTS             mem80                    486,CYRIX,SMM
@@ -1957,10 +1962,10 @@
 
 \S{} SEV-SNP AMD instructions
 
-\c PVALIDATE                                 VMX,AMD
-\c RMPADJUST                                 VMX,AMD
-\c VMGEXIT                                   VMX,AMD
-\c VMGEXIT                                   VMX,AMD
+\c PVALIDATE                                 VMX,AMD,ND
+\c RMPADJUST                                 VMX,AMD,ND
+\c VMGEXIT                                   VMX,AMD,ND
+\c VMGEXIT                                   VMX,AMD,ND
 
 \S{} Tejas New Instructions (SSSE3)
 
@@ -5986,9 +5991,9 @@
 
 \S{} Instructions from ISE doc 319433-040, June 2020
 
-\c ENQCMD           reg16,mem512             ENQCMD
+\c ENQCMD           reg16,mem512             ENQCMD,ND
 \c ENQCMD           reg32,mem512             ENQCMD,ND
-\c ENQCMD           reg32,mem512             ENQCMD
+\c ENQCMD           reg32,mem512             ENQCMD,ND
 \c ENQCMD           reg64,mem512             ENQCMD,LONG
 \c ENQCMDS          reg16,mem512             ENQCMD,PRIV
 \c ENQCMDS          reg32,mem512             ENQCMD,PRIV,ND

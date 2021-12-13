@@ -133,6 +133,8 @@ See Appendix A for the full details.
 Algorithm 1 summarizes the training algorithm for the PARROT policy <img src="https://render.githubusercontent.com/render/math?math=\pi_\theta">.
 The high-level strategy is to visit a set of states B and then update the parameters <img src="https://render.githubusercontent.com/render/math?math=\theta"> to make the same eviction decision as the optimal policy <img src="https://render.githubusercontent.com/render/math?math=\pi^*"> on each state <img src="https://render.githubusercontent.com/render/math?math=s \in B"> via the loss function <img src="https://render.githubusercontent.com/render/math?math=\mathcal{L}_\theta(s, \pi^*)">.
 
+<img width="637" alt="图片" src="https://user-images.githubusercontent.com/43129850/145821002-d7c6ec68-dd83-4e23-b1cd-f175409da79a.png">
+
 First, we convert a given sequence of consecutive cache accesses <img src="https://render.githubusercontent.com/render/math?math=(m_1, pc_1), \dots, (m_T, pc_T)"> into states <img src="https://render.githubusercontent.com/render/math?math=s_0, \dots, s_T"> (Section 4.2), on which we can compute the optimal action with Belady's (lines 3-5).
 Given the states, we train PARROT with truncated backpropagation through time (lines 6-9).
 We sample batches of consecutive states <img src="https://render.githubusercontent.com/render/math?math=s_{l-H}, \dots, s_{l+\pm H}"> and initialize the LSTM hidden state of our policy on the cache accesses of <img src="https://render.githubusercontent.com/render/math?math=s_{l-H}"> to <img src="https://render.githubusercontent.com/render/math?math=s_{l-1}">.

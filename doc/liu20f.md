@@ -159,7 +159,7 @@ This differs from many IL tasks (Hosu & Rebedea, 2016; Vecerik et al., 2017), wh
 ### 4.3. Ranking Loss
 
 Once the states <img src="https://render.githubusercontent.com/render/math?math=B"> are collected, we update our policy <img src="https://render.githubusercontent.com/render/math?math=\pi_\theta"> to better approximate Belady's <img src="https://render.githubusercontent.com/render/math?math=\pi^*"> on these states via the loss function <img src="https://render.githubusercontent.com/render/math?math=\mathcal{L}_\theta(s, \pi^*)">.
-A simple log-likelihood (LL) behavior cloning loss (Pomerleau, 1989) <img src="https://render.githubusercontent.com/render/math?math=\mathcal{L}(s,\pi^*) = log \pi_theta(\pi^*(s) | s)"> encourages the learned policy to place probability mass on the optimal action <img src="https://render.githubusercontent.com/render/math?math=\pi^*(s)">.
+A simple log-likelihood (LL) behavior cloning loss (Pomerleau, 1989) <img src="https://render.githubusercontent.com/render/math?math=\mathcal{L}(s,\pi^*) = log \pi_\theta(\pi^*(s) | s)"> encourages the learned policy to place probability mass on the optimal action <img src="https://render.githubusercontent.com/render/math?math=\pi^*(s)">.
 However, in the setting where the distribution <img src="https://render.githubusercontent.com/render/math?math=\pi^*(a | s)"> is known, instead of just the optimal action <img src="https://render.githubusercontent.com/render/math?math=\pi^*(s)">, optimizing to match this distribution can provide more supervision, similar to the intuition of distillation (Hinton et al., 2015).
 Thus, we propose an alternate ranking loss to leverage this additional supervision.
 

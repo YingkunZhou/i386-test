@@ -110,6 +110,12 @@ Then, <img src="https://render.githubusercontent.com/render/math?math=Belady_x">
 The cache hit rate of <img src="https://render.githubusercontent.com/render/math?math=Belady_x"> is plotted on the y-axis, normalized so that 0 and 1 correspond to the cache hit rate of LRU and <img src="https://render.githubusercontent.com/render/math?math=Belady_\infty"> (the normal unconstrained version of Belady's), respectively.
 As the figure shows, a significant amount of future information is required to fully match Belady's performance.
 
+<img width="540" alt="图片" src="https://user-images.githubusercontent.com/43129850/145817933-c5aef05a-d6a1-4b33-a64d-559ac3727465.png">
+Figure 2. Normalized cache hit rates of Belady’s vs. the number of
+accesses it looks into the future. Achieving 80% the performance
+of Belady’s with an infinite window size requires accurately computing
+reuse distances for lines 2600 accesses into the future.
+
 ## PARROT: Learning to Imitate Belady's
 
 ### 4.1. Model and Training Overview

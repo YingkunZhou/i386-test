@@ -1,5 +1,7 @@
 # Learning Memory Access Patterns
 
+https://proceedings.mlr.press/v80/hashemi18a.html
+
 ## Abstract
 
 The explosion in workload complexity and the recent slow-down in Moore's law scaling call for new approaches towards efficient computing.

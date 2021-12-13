@@ -75,7 +75,7 @@ This is called a *cache eviction* and selecting the optimal line to evict is the
 
 **Belady's Optimal Policy**.
 Given knowledge of future cache accesses, Belady's computes the optimal cache eviction decision.
-Specifically, at each timestep <img src="https://render.githubusercontent.com/render/math?math=t"> Belady's computes the reuse distance <img src="https://render.githubusercontent.com/render/math?math=d_t(l_w)"> for each line <img src="https://render.githubusercontent.com/render/math?math=l_w"> in the cache set, which is defined as the number of total cache accesses until the next access to <img src="https://render.githubusercontent.com/render/math?math=l_w"> Then, Belady's chooses to evict the line with the highest reuse distance, effectively the line used furthest in the future, i.e., <img src="https://render.githubusercontent.com/render/math?math=arg max_{w = 1,\dots , W} d_t(l_w)">.
+Specifically, at each timestep <img src="https://render.githubusercontent.com/render/math?math=\large t"> Belady's computes the reuse distance <img src="https://render.githubusercontent.com/render/math?math=\large d_t(l_w)"> for each line <img src="https://render.githubusercontent.com/render/math?math=\large l_w"> in the cache set, which is defined as the number of total cache accesses until the next access to <img src="https://render.githubusercontent.com/render/math?math=\large l_w"> Then, Belady's chooses to evict the line with the highest reuse distance, effectively the line used furthest in the future, i.e., <img src="https://render.githubusercontent.com/render/math?math=\large arg\ max_{w = 1,\dots , W} d_t(l_w)">.
 
 ## Casting Cache Replacement as Imitation Learning
 

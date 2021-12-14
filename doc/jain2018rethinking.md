@@ -53,7 +53,7 @@ Second, even if we knew the point on the curve that offered the best performance
 To navigate the space between MIN and Demand-MIN, this paper defines a simple new metric, Lines Evicted per Demand-Hit (LED), which serves as a proxy for the slope of the curves in Figure 2.
 This metric allows a policy to dynamically select a point in the space between MIN and Demand-MIN that is appropriate for a given workload.
 The result is Flex-MIN, a variant of MIN that is parameterized to represent different solutions within the space between MIN and Demand-MIN.
-(<sub></sub>)
+(<sub>Despite its name, Flex-MIN is not optimal in any theoretical sense since it is built on LED, which is a heuristic.</sub>)
 
 Of course, Demand-MIN, Flex-MIN, and MIN are impractical because they rely on knowledge of the future, but the Hawkeye Cache [15] shows how Belady's MIN algorithm can be used in a practical setting: The idea is to train a PC-based predictor that learns from the decisions that MIN would have made on past memory references; Hawkeye then makes replacement decisions based on what the predictor has learned.
 In this paper, we use the architecture and machinery of the Hawkeye Cache (along with a small amount of added hardware to measure LED values), but instead of learning from Belady's MIN algorithm, our policy learns from Flex-MIN.
@@ -172,7 +172,7 @@ Demand-MIN results in 1 demand miss.
 
 As a result, the prefetch to B at t=3 misses in the cache.
 The subsequent demand reference to B at t=3 still hits, but A now hits at t=4, which yields one more demand hit than Belady's MIN algorithm.
-Thus, this new caching strategy still results in 2 misses, but it exchanges a prefetch hit (<sub></sub>) for a demand hit.
+Thus, this new caching strategy still results in 2 misses, but it exchanges a prefetch hit (<sub>We define a prefetch hit to be a prefetch request that hits in the cache and is not sent to memory.</sub>) for a demand hit.
 resulting in just a single demand miss (to sC).
 
 In this simple example, our improvement in demand hits did not increase overall memory traffic, but it is, of course, possible to trade multiple prefetch hits for a single demand hit, which can lead to extra prefetch traffic.
@@ -205,7 +205,7 @@ Figure 5 shows the three classes of accesses that Demand-MIN evicts to create ro
 Figure 6.
 Demand-MIN increases demand hit rate by using space allocated to prefetch-friendly lines (dark gray) to instead cache hard-to-prefetch lines (white space).
 
-To reason about cache replacement in the presence of prefetches, we now extend Hawkeye's notion of a usage interval [15] defined to be the time between two consecutive references to the same cache line (<sub></sub>) -to identify the endpoints as being either a demand access (D) or a prefetch (P).
+To reason about cache replacement in the presence of prefetches, we now extend Hawkeye's notion of a usage interval [15] defined to be the time between two consecutive references to the same cache line (<sub>For example, in Figure 5(a), the dashed line represents one usage interval.</sub>) -to identify the endpoints as being either a demand access (D) or a prefetch (P).
 Thus there are four types of usage intervals, namely, P-P, D-P, D-D, and P-D.
 If we include open intervals, representing lines that are never reused, there are two more types: P-open and D-open.
 

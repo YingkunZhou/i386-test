@@ -278,7 +278,7 @@ Here <img src="https://render.githubusercontent.com/render/math?math=E(d_p)"> is
 
 Substituting the expressions for <img src="https://render.githubusercontent.com/render/math?math=L_i"> and <img src="https://render.githubusercontent.com/render/math?math=L_L"> in the equation for <img src="https://render.githubusercontent.com/render/math?math=E(d_p)"> results in
 
-<img src="https://render.githubusercontent.com/render/math?math=E(d_{p})\approx{\sum\limits_{i=1}^{d_{p}} N_{i} \over \sum\limits_{i=1}^{d_{p}}(N_{i}\ast i)+\left(N_{t}-\sum\limits_{i=1}^{d_{p}}N_{i}\right)\ast(d_{p}+d_{e})} \qquad (1)">
+<img src="https://render.githubusercontent.com/render/math?math=E(d_{p})\approx \frac{\sum_{i=1}^{d_{p}} N_{i}}{\sum_{i=1}^{d_{p}}(N_{i} * i)+\pm (N_{t}-\sum_{i=1}^{d_{p}}N_{i})*(d_{p}+\pm d_{e})} \qquad (1)">
 
 Finally, the <img src="https://render.githubusercontent.com/render/math?math=d_e"> is a function of cache associativity and program behavior.
 It has an impact on <img src="https://render.githubusercontent.com/render/math?math=E(d_p)"> only when the <img src="https://render.githubusercontent.com/render/math?math=d_p"> is small.

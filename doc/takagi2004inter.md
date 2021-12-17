@@ -80,7 +80,7 @@ The backward distance <img src="https://render.githubusercontent.com/render/math
 
 **Inter-Reference Gap (IRG)** of a memory-block is defined as the virtual time difference between successive references to the memory-block.
 Assume a memory-block b is referenced n times at virtual times <img src="https://render.githubusercontent.com/render/math?math=t_1, t_2, \dots , t_n">.
-From a viewpoint of a certain virtual time t, (1) **the last IRG** is defined as the last observed IRG and (2) **the next IRG** is defined as <img src="https://render.githubusercontent.com/render/math?math=d_b(t) + f_b(t)">; and is defined as a plus infinity when <img src="https://render.githubusercontent.com/render/math?math=t \geq tn">.
+From a viewpoint of a certain virtual time t, (1) **the last IRG** is defined as the last observed IRG and (2) **the next IRG** is defined as <img src="https://render.githubusercontent.com/render/math?math=d_b(t) +\pm f_b(t)">; and is defined as a plus infinity when <img src="https://render.githubusercontent.com/render/math?math=t \geq tn">.
 
 When we know <img src="https://render.githubusercontent.com/render/math?math=f_b(t)">, replacing the memory-block with the largest <img src="https://render.githubusercontent.com/render/math?math=f_b(t)"> is optimal with regard to the miss count [2]; and this algorithm is called MIN.
 Therefore the ideal weight of a memory-block is a monotonically decreasing function of <img src="https://render.githubusercontent.com/render/math?math=f_b(t)">; however, evaluation of <img src="https://render.githubusercontent.com/render/math?math=f_b(t)"> requires knowledge of future events; thereby replacement algorithms estimate the ideal weight of a memory-block, and use this estimated value as its weight.
@@ -336,7 +336,7 @@ The IRG of b is recorded to its class information; then its block information is
 #### 4.1.5 Replacement of Block Information
 
 **Figure 6** shows the replacement algorithm for entries in the main and ghost directories.
-WA(G(\delta + 1)) is an estimated weight whose details are described in Section 4.2.3.
+<img src="https://render.githubusercontent.com/render/math?math=\mathcal{W}_A(G(\delta +\pm 1))"> is an estimated weight whose details are described in Section 4.2.3.
 The replacement algorithm for the main directory corresponds to the cache replacement algorithm.
 Replacement candidates have corresponding memory-blocks; the replacement algorithm retrieves the weights of these memory-blocks from the weight table, and then selects for eviction the directory entry whose corresponding memory-block has the minimum weight.
 The algorithm uses a different weight for a memory-block of PS; (1) the reciprocal of its last IRG when its BD is within its last IRG; (2) the value in the weight table when its BD is outside its last IRG.
@@ -353,14 +353,14 @@ IGDR replaces ghost directory entries so that the number of memory-blocks in eac
 A table <img src="https://render.githubusercontent.com/render/math?math=\mathcal{D}\prime">, which corresponds the <img src="https://render.githubusercontent.com/render/math?math=\mathcal{D}"> table and records the IRG distribution using this index, is defined as follows.
 
 <img src="https://render.githubusercontent.com/render/math?math=\large \mathcal{D}\prime_{B_k}(i) = ">
-<img src="https://render.githubusercontent.com/render/math?math=\large \qquad \qquad \sum^{g(i+1)-1}_{j=gi}\mathcal{D}_{B_k}(j), 0 \leq i < U-1 ">
+<img src="https://render.githubusercontent.com/render/math?math=\large \qquad \qquad \sum^{g(i+\pm 1)-1}_{j=gi}\mathcal{D}_{B_k}(j), 0 \leq i < U-1 ">
 <img src="https://render.githubusercontent.com/render/math?math=\large \qquad \qquad \sum^{\infty}_{j=gi}\mathcal{D}_{B_k}, i = U-1">
 
 IGDR approximates w_{B_k} using <img src="https://render.githubusercontent.com/render/math?math=\mathcal{D}\prime"> as follows.
 
-<img src="https://render.githubusercontent.com/render/math?math=\large w_{B_k} (\delta) \approx \frac{\sum^{U-1}_{i=G(\delta+1)}\mathcal{D}\prime_{B_k}(i)\frac{1}{g(i+1)}}{\sum^{U-1}{j=G(\delta+1)}\mathcal{D}\prime_{B_k}(j)} \qquad (8)">
+<img src="https://render.githubusercontent.com/render/math?math=\large w_{B_k} (\delta) \approx \frac{\sum^{U-1}_{i=G(\delta+\pm 1)}\mathcal{D}\prime_{B_k}(i)\frac{1}{g(i+\pm 1)}}{\sum^{U-1}{j=G(\delta+\pm 1)}\mathcal{D}\prime_{B_k}(j)} \qquad (8)">
 
-For <img src="https://render.githubusercontent.com/render/math?math=0 \leq i < U">, IRGs <img src="https://render.githubusercontent.com/render/math?math=\delta"> where <img src="https://render.githubusercontent.com/render/math?math=g i \leq \delta < g (i + 1)"> are treated as the same.
+For <img src="https://render.githubusercontent.com/render/math?math=0 \leq i < U">, IRGs <img src="https://render.githubusercontent.com/render/math?math=\delta"> where <img src="https://render.githubusercontent.com/render/math?math=g i \leq \delta < g (i +\pm 1)"> are treated as the same.
 This degrades the weight estimation accuracy; therefore small g is preferred.
 Occurrence numbers of IRGs equal to or greater than <img src="https://render.githubusercontent.com/render/math?math=g U"> are recorded in the same table entry as those with <img src="https://render.githubusercontent.com/render/math?math=g (U-1)">.
 This also degrades the accuracy; thus it is desirable that <img src="https://render.githubusercontent.com/render/math?math=g U"> is greater than the maximum IRG that a program exhibits.
@@ -385,7 +385,7 @@ N is updated as follows in this case.
 
 N is updated in a similar way when the block information of b is evicted from the ghost directory.
 N(i) records the number of memory-blocks where <img src="https://render.githubusercontent.com/render/math?math=\lceil t_c/g\rceil - \lceil t_l/g\rceil = i">.
-That is, N(i) records the approximate number of memory-blocks whose BDs are from <img src="https://render.githubusercontent.com/render/math?math=g i"> to <img src="https://render.githubusercontent.com/render/math?math=g (i+1)">.
+That is, N(i) records the approximate number of memory-blocks whose BDs are from <img src="https://render.githubusercontent.com/render/math?math=g i"> to <img src="https://render.githubusercontent.com/render/math?math=g (i+\pm 1)">.
 The Q register accumulates the value in the head entry which is pushed out every g ticks.
 F is a constant parameter and Q is initialized every F ticks.
 Q approximates the number of memory-blocks that are not referenced over <img src="https://render.githubusercontent.com/render/math?math=g U"> ticks, observed for F ticks.
@@ -421,15 +421,15 @@ This calculation takes a long time; thus the following operation is performed ev
 <img src="https://render.githubusercontent.com/render/math?math=v_1"> and <img src="https://render.githubusercontent.com/render/math?math=v_2"> are temporal registers.
 
 <img src="https://render.githubusercontent.com/render/math?math=v_1 \leftarrow S(U - 1)/(g * U)">
-<img src="https://render.githubusercontent.com/render/math?math=v_2 \leftarrow S\prime(U - 1) + Q">
+<img src="https://render.githubusercontent.com/render/math?math=v_2 \leftarrow S\prime(U - 1) +\pm Q">
 <img src="https://render.githubusercontent.com/render/math?math=\mathcal{W}(U - 1) \leftarrow v_1/v_2">
 <img src="https://render.githubusercontent.com/render/math?math=\text{for} i = U - 2 \text{downto} 0 \text{do}">
-<img src="https://render.githubusercontent.com/render/math?math=\qquad \qquad v1 \leftarrow v1 + S(i)/(g * (i + 1))">
-<img src="https://render.githubusercontent.com/render/math?math=\qquad \qquad v2 \leftarrow v2 + S\prime(i)">
+<img src="https://render.githubusercontent.com/render/math?math=\qquad \qquad v1 \leftarrow v1 +\pm S(i)/(g * (i +\pm 1))">
+<img src="https://render.githubusercontent.com/render/math?math=\qquad \qquad v2 \leftarrow v2 +\pm S\prime(i)">
 <img src="https://render.githubusercontent.com/render/math?math=\qquad \qquad W(i) ← v1/v2">
 <img src="https://render.githubusercontent.com/render/math?math=\text{end for}">
 
-Assume a memory-block b in class A and its BD is <img src="https://render.githubusercontent.com/render/math?math=\delta"> at a certain virtual time; <img src="https://render.githubusercontent.com/render/math?math=\mathcal{W}_A(G(\delta + 1))"> is used as its weight.
+Assume a memory-block b in class A and its BD is <img src="https://render.githubusercontent.com/render/math?math=\delta"> at a certain virtual time; <img src="https://render.githubusercontent.com/render/math?math=\mathcal{W}_A(G(\delta +\pm 1))"> is used as its weight.
 On a replacement request, the weights of the replacement candidate memory-blocks are retrieved from the W table; and the weights are compared; and then the memory-block with the smallest weight is selected.
 Figure 8 illustrates the replacement decision.
 Memory-blocks 1, 2, 3 and 4 are the replacement candidates.

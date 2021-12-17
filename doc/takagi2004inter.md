@@ -66,17 +66,17 @@ The units of the virtual time are called **ticks**.
 Definition 1 (**Forward Distance (FD)** <img src="https://render.githubusercontent.com/render/math?math=f_b(t)">).
 The forward distance <img src="https://render.githubusercontent.com/render/math?math=f_b(t)"> of memory-block b at virtual time t is the time difference between the next reference time and t:
 
-<img src="https://render.githubusercontent.com/render/math?math=f_b(t) =">
-<img src="https://render.githubusercontent.com/render/math?math=\qquad \qquad x - t,\ \text{if} r_x = b\ \text{for} \exists x > t\ \text{and} r_y \neq b\ \text{for} t < \forall y < x">
-<img src="https://render.githubusercontent.com/render/math?math=\qquad \qquad \infty,\ \text{if} r_x = b\ \text{for} \forall x < t">
+<img src="https://render.githubusercontent.com/render/math?math=\large f_b(t) =">
+<img src="https://render.githubusercontent.com/render/math?math=\large \qquad \qquad x - t,\ \text{if} r_x = b\ \text{for} \exists x > t\ \text{and} r_y \neq b\ \text{for} t < \forall y < x">
+<img src="https://render.githubusercontent.com/render/math?math=\large \qquad \qquad \infty,\ \text{if} r_x = b\ \text{for} \forall x < t">
 
 Definition 2 (**Backward Distance (BD)** <img src="https://render.githubusercontent.com/render/math?math=d_b(t)">).
 The backward distance <img src="https://render.githubusercontent.com/render/math?math=d_b(t)"> of memory-block b at virtual time t is the time difference between the last reference time and t:
 
-<img src="https://render.githubusercontent.com/render/math?math=d_b(t) =">
-<img src="https://render.githubusercontent.com/render/math?math=\qquad \qquad 0,\ \text{if} r_x = b">
-<img src="https://render.githubusercontent.com/render/math?math=\qquad \qquad x - t,\ \text{if} r_x = b\ \text{for} \exists x < t\ \text{and} r_y \neq b\ \text{for} x < \forall y \leq t">
-<img src="https://render.githubusercontent.com/render/math?math=\qquad \qquad \infty,\ \text{if} r_x \neq b\ \text{for} \forall x \leq t">
+<img src="https://render.githubusercontent.com/render/math?math=\large d_b(t) =">
+<img src="https://render.githubusercontent.com/render/math?math=\large \qquad \qquad 0,\ \text{if} r_x = b">
+<img src="https://render.githubusercontent.com/render/math?math=\large \qquad \qquad x - t,\ \text{if} r_x = b\ \text{for} \exists x < t\ \text{and} r_y \neq b\ \text{for} x < \forall y \leq t">
+<img src="https://render.githubusercontent.com/render/math?math=\large \qquad \qquad \infty,\ \text{if} r_x \neq b\ \text{for} \forall x \leq t">
 
 **Inter-Reference Gap (IRG)** of a memory-block is defined as the virtual time difference between successive references to the memory-block.
 Assume a memory-block b is referenced n times at virtual times <img src="https://render.githubusercontent.com/render/math?math=t_1, t_2, \dots , t_n">.
@@ -151,15 +151,15 @@ This expected value is used as the weight of the memory-block.
 
 <img src="https://render.githubusercontent.com/render/math?math=\psi_b(i|\delta)"> is defined as follows, which is expected to represent the probability of <img src="https://render.githubusercontent.com/render/math?math=f_b(t) = i - \delta"> at the virtual time t with <img src="https://render.githubusercontent.com/render/math?math=d_b(t) = \delta">.
 
-<img src="https://render.githubusercontent.com/render/math?math=\psi_b(i|\delta) = \frac{\phi_b(i)}{\sum^{\infty}{j=\delta+\pm 1} \phi_b(j)} \qquad (1)">
+<img src="https://render.githubusercontent.com/render/math?math=\large \psi_b(i|\delta) = \frac{\phi_b(i)}{\sum^{\infty}_{j=\delta+\pm 1} \phi_b(j)} \qquad (1)">
 
 The weight of b at virtual time t is defined as the expected value of the reciprocal of the next IRG, which is expressed as a function of <img src="https://render.githubusercontent.com/render/math?math=\delta = d_b(t)"> as:
 
-<img src="https://render.githubusercontent.com/render/math?math=\Large w_b(\delta) = \sum^{\infty}_{j=\delta+\pm 1} \psi_b(i | \delta)\frac{1}{i} \qquad (2)">
+<img src="https://render.githubusercontent.com/render/math?math=\large w_b(\delta) = \sum^{\infty}_{j=\delta+\pm 1} \psi_b(i | \delta)\frac{1}{i} \qquad (2)">
 
 <img src="https://render.githubusercontent.com/render/math?math=i = \delta"> is excluded from the summation of Equation (2) because it is assumed to be used for unreferenced memoryblocks at that time. From Equations (1) and (2), <img src="https://render.githubusercontent.com/render/math?math=w_b(\delta)"> is expressed as follows.
 
-<img src="https://render.githubusercontent.com/render/math?math=\w_b(\delta) = \frac{\sum^{\infty}{j=\delta+\pm 1} \phi_b(i)\frac{1}{i}}{\sum^{\infty}{j=\delta+\pm 1} \phi_b(j)} \qquad (3)">
+<img src="https://render.githubusercontent.com/render/math?math=\large \w_b(\delta) = \frac{\sum^{\infty}_{j=\delta+\pm 1} \phi_b(i)\frac{1}{i}}{\sum^{\infty}_{j=\delta+\pm 1} \phi_b(j)} \qquad (3)">
 
 Figure 2 illustrates the memory-block weight calculation.
 Four memory-blocks are shown and they have their own probability distribution of IRG, i.e. <img src="https://render.githubusercontent.com/render/math?math=\phi_1(i), \phi_2(i), \phi_3(i), \phi_4(i)">.
@@ -178,7 +178,7 @@ The set of memory-blocks B is divided into m disjoint subsets, namely <img src="
 <img src="https://render.githubusercontent.com/render/math?math=\phi_{B_k} (i)"> is defined as the probability that a reference of a memory-block in the class <img src="https://render.githubusercontent.com/render/math?math=B_k"> occurs with the IRG i.
 <img src="https://render.githubusercontent.com/render/math?math=w_{B_k} (\delta)"> is defined as the weight of a memory-block in the class <img src="https://render.githubusercontent.com/render/math?math=B_k">, in accord with Equation (3).
 
-<img src="https://render.githubusercontent.com/render/math?math=w_{B_k} (\delta) = \frac{\sum^{infty}_{i=\delta +\pm 1}\phi_{B_k}(i)\frac{1}{i}}{\sum^{infty}{j=\delta+\pm 1}\phi_{B_k}(j)} \qquad (4)">
+<img src="https://render.githubusercontent.com/render/math?math=\large w_{B_k} (\delta) = \frac{\sum^{infty}_{i=\delta +\pm 1}\phi_{B_k}(i)\frac{1}{i}}{\sum^{infty}_{j=\delta+\pm 1}\phi_{B_k}(j)} \qquad (4)">
 
 ### 3.3 Weight Estimation using IRG Distribution Statistics
 
@@ -186,11 +186,11 @@ IGDR estimates the value of Equation (4) using IRG distribution statistics per c
 For memory-blocks belonging to <img src="https://render.githubusercontent.com/render/math?math=B_k">, IGDR records the number of references where their IRGs are i ticks in <img src="https://render.githubusercontent.com/render/math?math=\mathcal{D}_{B_k} (i)">.
 IGDR estimates <img src="https://render.githubusercontent.com/render/math?math=\phi_{B_k} (i)"> as follows.
 
-<img src="https://render.githubusercontent.com/render/math?math=\phi_{B_k} \approx \frac{\mathcal{D}_{B_k} (i)}{\sum^\infty_{j=1}\mathcal{D}_{B_k} (j)} \qquad (5)">
+<img src="https://render.githubusercontent.com/render/math?math=\large \phi_{B_k} \approx \frac{\mathcal{D}_{B_k} (i)}{\sum^\infty_{j=1}\mathcal{D}_{B_k} (j)} \qquad (5)">
 
 <img src="https://render.githubusercontent.com/render/math?math=w_{B_k}"> is approximated using Equation (5) and (4) as follows.
 
-<img src="https://render.githubusercontent.com/render/math?math=w_{B_k} (\delta) \approx \frac{\sum^\infty_{j=\delta +\pm 1}\mathcal{D}_{B_k} (i)\frac{1}{i}}{\sum^\infty_{j=\delta +\pm 1}\mathcal{D}_{B_k} (j)} \qquad (6)">
+<img src="https://render.githubusercontent.com/render/math?math=\large w_{B_k} (\delta) \approx \frac{\sum^\infty_{j=\delta +\pm 1}\mathcal{D}_{B_k} (i)\frac{1}{i}}{\sum^\infty_{j=\delta +\pm 1}\mathcal{D}_{B_k} (j)} \qquad (6)">
 
 ### 3.4 Classification of Memory-Blocks
 
@@ -346,19 +346,19 @@ IGDR replaces ghost directory entries so that the number of memory-blocks in eac
 
 <img src="https://render.githubusercontent.com/render/math?math=\mathcal{D}_{B_k}"> in Equation (6) is a table allocating an entry for every IRG value; thus it requires an enormous storage area. Therefore, a method recording the distribution using a table with a practical number of entries, the number being a constant parameter U, is introduced: (1) The IRG space is divided into regions with a span of g ticks and the occurrence count per region is recorded; g is a constant parameter, and (2) occurrence counts of IRGs that are equal to or greater than <img src="https://render.githubusercontent.com/render/math?math=g\times (U-1)"> are recorded into one entry. A function <img src="https://render.githubusercontent.com/render/math?math=G(\delta)">, which gives the table index from a IRG <img src="https://render.githubusercontent.com/render/math?math=\delta">, is defined as follows.
 
-<img src="https://render.githubusercontent.com/render/math?math=G(\delta) = \qquad (7)">
-<img src="https://render.githubusercontent.com/render/math?math=\qquad \qquad \lceil \delta/g\rceil, \delta/g < U-1">
-<img src="https://render.githubusercontent.com/render/math?math=\qquad \qquad U - 1, \delta/g\req U-1 ">
+<img src="https://render.githubusercontent.com/render/math?math=\large G(\delta) = \qquad (7)">
+<img src="https://render.githubusercontent.com/render/math?math=\large \qquad \qquad \lceil \delta/g\rceil, \delta/g < U-1">
+<img src="https://render.githubusercontent.com/render/math?math=\large \qquad \qquad U - 1, \delta/g\req U-1 ">
 
 A table <img src="https://render.githubusercontent.com/render/math?math=\mathcal{D}\prime">, which corresponds the <img src="https://render.githubusercontent.com/render/math?math=\mathcal{D}"> table and records the IRG distribution using this index, is defined as follows.
 
-<img src="https://render.githubusercontent.com/render/math?math=\mathcal{D}\prime_{B_k}(i) = ">
-<img src="https://render.githubusercontent.com/render/math?math=\qquad \qquad \sum^{g(i+1)-1}_{j=gi}\mathcal{D}_{B_k}(j), 0 \leq i < U-1 ">
-<img src="https://render.githubusercontent.com/render/math?math=\qquad \qquad \sum^{\infty}_{j=gi}\mathcal{D}_{B_k}, i = U-1">
+<img src="https://render.githubusercontent.com/render/math?math=\large \mathcal{D}\prime_{B_k}(i) = ">
+<img src="https://render.githubusercontent.com/render/math?math=\large \qquad \qquad \sum^{g(i+1)-1}_{j=gi}\mathcal{D}_{B_k}(j), 0 \leq i < U-1 ">
+<img src="https://render.githubusercontent.com/render/math?math=\large \qquad \qquad \sum^{\infty}_{j=gi}\mathcal{D}_{B_k}, i = U-1">
 
 IGDR approximates w_{B_k} using <img src="https://render.githubusercontent.com/render/math?math=\mathcal{D}\prime"> as follows.
 
-<img src="https://render.githubusercontent.com/render/math?math=w_{B_k} (\delta) \approx \frac{\sum^{U-1}_{i=G(\delta+1)}\mathcal{D}\prime_{B_k}(i)\frac{1}{g(i+1)}}{\sum^{U-1}{j=G(\delta+1)}\mathcal{D}\prime_{B_k}(j)} \qquad (8)">
+<img src="https://render.githubusercontent.com/render/math?math=\large w_{B_k} (\delta) \approx \frac{\sum^{U-1}_{i=G(\delta+1)}\mathcal{D}\prime_{B_k}(i)\frac{1}{g(i+1)}}{\sum^{U-1}{j=G(\delta+1)}\mathcal{D}\prime_{B_k}(j)} \qquad (8)">
 
 For <img src="https://render.githubusercontent.com/render/math?math=0 \leq i < U">, IRGs <img src="https://render.githubusercontent.com/render/math?math=\delta"> where <img src="https://render.githubusercontent.com/render/math?math=g i \leq \delta < g (i + 1)"> are treated as the same.
 This degrades the weight estimation accuracy; therefore small g is preferred.
@@ -379,9 +379,9 @@ Assume memory-block b in class A is referenced at virtual time <img src="https:/
 The reference might change the class of b from A to <img src="https://render.githubusercontent.com/render/math?math=A\prime"> .
 N is updated as follows in this case.
 
-<img src="https://render.githubusercontent.com/render/math?math=i \leftarrow \lceil t_c/g\rceil - \lceil t_l/g\rceil">
-<img src="https://render.githubusercontent.com/render/math?math=\text{if} i < U \text{then} \mathcal{N}_A(i)\leftarrow \mathcal{N}_A(i) - 1 \text{end if}">
-<img src="https://render.githubusercontent.com/render/math?math=\mathcal{N}_A\prime (0)\leftarrow \mathcal{N}_A\prime (0) + 1">
+<img src="https://render.githubusercontent.com/render/math?math=\large i \leftarrow \lceil t_c/g\rceil - \lceil t_l/g\rceil">
+<img src="https://render.githubusercontent.com/render/math?math=\large \text{if} i < U \text{then} \mathcal{N}_A(i)\leftarrow \mathcal{N}_A(i) - 1 \text{end if}">
+<img src="https://render.githubusercontent.com/render/math?math=\large \mathcal{N}_A\prime (0)\leftarrow \mathcal{N}_A\prime (0) + 1">
 
 N is updated in a similar way when the block information of b is evicted from the ghost directory.
 N(i) records the number of memory-blocks where <img src="https://render.githubusercontent.com/render/math?math=\lceil t_c/g\rceil - \lceil t_l/g\rceil = i">.

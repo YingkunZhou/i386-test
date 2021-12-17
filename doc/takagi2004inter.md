@@ -1,6 +1,6 @@
 # Inter-Reference Gap Distribution Replacement: An Improved Replacement Algorithm for Set-Associative Caches
 
-**Categories and Subject Descriptors** B.3.2 [Memory Structures]: Design Styles—Cache memories
+**Categories and Subject Descriptors** B.3.2 [Memory Structures]: Design Styles - Cache memories
 
 **General Terms** Algorithms, Design, Management, Performance
 
@@ -426,7 +426,7 @@ This calculation takes a long time; thus the following operation is performed ev
 <img src="https://render.githubusercontent.com/render/math?math=\text{for} i = U - 2 \text{downto} 0 \text{do}">
 <img src="https://render.githubusercontent.com/render/math?math=\qquad \qquad v1 \leftarrow v1 +\pm S(i)/(g * (i +\pm 1))">
 <img src="https://render.githubusercontent.com/render/math?math=\qquad \qquad v2 \leftarrow v2 +\pm S\prime(i)">
-<img src="https://render.githubusercontent.com/render/math?math=\qquad \qquad W(i) ← v1/v2">
+<img src="https://render.githubusercontent.com/render/math?math=\qquad \qquad W(i) \leftarrow v1/v2">
 <img src="https://render.githubusercontent.com/render/math?math=\text{end for}">
 
 Assume a memory-block b in class A and its BD is <img src="https://render.githubusercontent.com/render/math?math=\delta"> at a certain virtual time; <img src="https://render.githubusercontent.com/render/math?math=\mathcal{W}_A(G(\delta +\pm 1))"> is used as its weight.

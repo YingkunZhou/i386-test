@@ -117,8 +117,7 @@ We then describe an implementation of our mechanism using a Bloom filter [6], wh
 
 ### 2.1 Addressing Cache Pollution
 
-##### Observation
-
+> Observation:
 If a cache block with high reuse is prematurely evicted from the cache, then it will likely be accessed soon after eviction.
 On the other hand, a cache block with little or no reuse will likely not be accessed for a long time after eviction.
 
@@ -151,8 +150,7 @@ When the EAF becomes full, the cache removes the least-recently-evicted block ad
 
 Although the EAF-based mechanism described above, which we refer to as the plain-EAF, can distinguish high-reuse blocks from low-reuse blocks, it suffers from two problems: 1) a naïve implementation of the plain-EAF (a set-associative tag store similar to the main tag store) has high storage and power overhead, and 2) the plain-EAF does not address thrashing.
 
-##### Observation
-
+> Observation
 Implementing EAF using a Bloom filter addresses the first problem, as a Bloom filter has low storage and power overhead.
 In addition, we observe that a Bloom-filter-based EAF implementation also mitigates thrashing.
 
@@ -164,12 +162,13 @@ We first provide a deeper understanding of why the plain-EAF suffers from the th
 Consider an application that accesses a working set larger than the cache size in a cyclic manner.
 In the context of EAF, there are two possible cases.
 
-The working set is larger than the aggregate size of blocks tracked by the cache and EAF together.
+**Case 1**: The working set is larger than the aggregate size of blocks tracked by the cache and EAF together.
 In this case, no missed block's address will be present in the EAF.
 Therefore, all missed blocks will be predicted to have low reuse and inserted into the cache with a low priority.
-This leads to cache under-utilization as no block is inserted with a high priority, even though there is reuse in the working set.1 In this case, we would like to always retain a fraction of the working set in the cache as doing so will lead to cache hits at least for that fraction.
+This leads to cache under-utilization as no block is inserted with a high priority, even though there is reuse in the working set. (<sub>We assume that the cache is already Vlled with some other data.</sub>)
+In this case, we would like to always retain a fraction of the working set in the cache as doing so will lead to cache hits at least for that fraction.
 
-The working set is smaller than the aggregate number of blocks tracked by both the cache and EAF together.
+**Case 2**: The working set is smaller than the aggregate number of blocks tracked by both the cache and EAF together.
 In this case, every missed block's address will be present in the EAF.
 As a result, every missed block will be predicted to have high reuse and inserted into the cache with a high priority.
 This will lead to blocks of the application evicting each other from the cache.
@@ -394,14 +393,17 @@ In addition, like TA-DIP, since TA-DRRIP operates at a thread (rather than a blo
 The key idea is to group blocks based on the program counter that loaded them into the cache and learn the reuse behavior of each group using a table of counters.
 On a cache miss, SHIP indexes the table with the program counter that generated the miss and uses the counter value to predict the reuse behavior of the missed cache block.
 SHIP suffers from two shortcomings: 1) blocks loaded by the same program counter often may not have the same reuse behavior.
-In such cases, SHIP leads to many mispredictions, 2) when the number of blocks predicted to have high reuse exceeds the size of the cache, SHIP cannot address the resulting cache thrashing problem.2
+In such cases, SHIP leads to many mispredictions, 2) when the number of blocks predicted to have high reuse exceeds the size of the cache, SHIP cannot address the resulting cache thrashing problem. (<sub>We also implemented single-usage block prediction [34] (SU), which also uses the program counter to identify reuse behavior of missed blocks. Both SU and SHIP provide similar performance.</sub>)
 
 **Run-Time Cache Bypassing (RTB)** [19] addresses cache pollution by predicting reuse behavior of a missed block based on the memory region to which it belongs.
 RTB learns the reuse behavior of 1KB memory regions using a table of reuse counters.
 On a cache miss, RTB compares the reuse behavior of the missed block with the reuse behavior of the to-be-evicted block.
 If the missed block has higher reuse, it is inserted into the cache.
 Otherwise, it bypasses the cache.
-As RTB's operation is similar to that of SHIP, it suffers from similar shortcomings as SHIP.3
+As RTB's operation is similar to that of SHIP, it suffers from similar shortcomings as SHIP.
+(<sub>The SHIP paper [55] also evaluates mechanisms that use memory regions and other signatures to group blocks.
+The paper identifies that program counter-based grouping provides the best results.
+We reach a similar conclusion based on our experimental results.</sub>)
 
 **Miss Classification Table (MCT)** [9] also addresses the cache pollution problem.
 MCT keeps track of one most recently evicted block address for each set in the cache.
@@ -457,8 +459,10 @@ Sensitivity: perf.
 Degradation < 5% (low); > 18% (high); rest (medium)
 
 We evaluate multi-programmed workloads running on 2-core and 4-core CMPs.
-We generate nine categories of multiprogrammed workloads with different levels of aggregate intensity (low, medium, or high) and aggregate sensitivity (low, medium, or high).4 We evaluate the server benchmarks separately with ten 2-core and five 4-core workload combinations.
-In all, we present results for 208 2-core and 135 4-core workloads.5
+We generate nine categories of multiprogrammed workloads with different levels of aggregate intensity (low, medium, or high) and aggregate sensitivity (low, medium, or high).
+(<sub>We compute aggregate intensity/sensitivity of a workload as the sum of individual benchmark intensities/sensitivities (low = 0, medium = 1, high = 2).</sub>)
+We evaluate the server benchmarks separately with ten 2-core and five 4-core workload combinations.
+In all, we present results for 208 2-core and 135 4-core workloads. (<sub>We provide details of individual workloads in our tech report [47].</sub>)
 
 We evaluate system performance using the weighted speedup metric [50], which is shown to correlate with the system throughput [11].
 We also evaluate three other metrics, namely, instruction throughput, harmonic speedup [28], and maximum slowdown [25], [26], in Section 7.6 for completeness.
@@ -474,7 +478,11 @@ We also evaluate three other metrics, namely, instruction throughput, harmonic s
 Figure 4:
 System performance: single-core system
 
-Figure 4 compares the performance, instructions per cycle (IPC), for different benchmarks with different mechanisms.6 The percentages on top of the bars show the reduction in the last-level cache misses per kilo instruction of D-EAF compared to LRU.
+Figure 4 compares the performance, instructions per cycle (IPC), for different benchmarks with different mechanisms.
+(<sub>For clarity, results for DIP and RTB are excluded from Figures 4 and 5 (left) as their performance improvements are lower compared to the other mechanisms.
+We also don’t present single-core results for benchmarks where all mechanisms perform within 1% of the baseline LRU.
+Our tech report provides the full results [47].</sub>)
+The percentages on top of the bars show the reduction in the last-level cache misses per kilo instruction of D-EAF compared to LRU.
 We draw two conclusions from the figure.
 
 First, D-EAF, with its ability to address both pollution and thrashing, provides performance comparable to the better of the previous best mechanisms to address pollution (SHIP) or thrashing (DRRIP) for most benchmarks.
@@ -510,8 +518,13 @@ Figure 7:
 4-core system performance for different workload categories.
 The value on top of each group indicates % improvement in weighted speedup provided by D-EAF compared to LRU.
 
-Figure 7 shows the absolute weighted speedup for our 4-core system grouped based on different workload categories (as described in Section 6).7 The percentage on top of the bars show the improvement in weighted speedup of D-EAF compared to the LRU policy.
-For SPEC workloads, as expected, overall system performance decreases as the intensity of the workloads increases from low to high.8 Regardless, both EAF and D-EAF outperform other prior approaches for all workload categories (21% over LRU and 8% over the best previous mechanism, SHIP).
+Figure 7 shows the absolute weighted speedup for our 4-core system grouped based on different workload categories (as described in Section 6).
+(<sub>We do not include the results for 2-core workloads due to space constraints.
+The observed trends for them are similar to those for 4-core workloads.
+We include these results in our tech report [47].</sub>)
+The percentage on top of the bars show the improvement in weighted speedup of D-EAF compared to the LRU policy.
+For SPEC workloads, as expected, overall system performance decreases as the intensity of the workloads increases from low to high. (<sub>Our server benchmarks have little scope for categorization. Therefore, we present average results for all server workloads.</sub>)
+Regardless, both EAF and D-EAF outperform other prior approaches for all workload categories (21% over LRU and 8% over the best previous mechanism, SHIP).
 The figure also shows that within each intensity category, the performance improvement of our mechanisms increases with increasing cache sensitivity of the workloads.
 This is because the negative impact of cache under-utilization increases as workloads become more sensitive to cache space.
 Although not explicitly shown in the figure, the performance improvement of D-EAF over the best previous mechanism (SHIP) also increases as the cache sensitivity of the workloads increases.

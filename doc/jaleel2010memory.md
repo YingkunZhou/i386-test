@@ -1,3 +1,5 @@
+# Memory Characterization of Workloads Using Instrumentation-Driven Simulation -- A Pin-based Memory Characterization of the SPEC CPU2000 and SPEC CPU2006 Benchmark Suites
+
 ## Abstract
 
 There is a growing need for simulation methodologies to understand the memory system requirements of emerging workloads in a reasonable amount of time. This paper presents binary instrumentation-driven simulation as an alternative to conventional execution-driven and trace-driven simulation methodologies. We illustrate the use of instrumentation-driven simulation (IDS) using Pin to determine the memory system requirements of workloads from the SPEC CPU2000 and SPEC CPU2006 benchmark suites. In comparison to SPEC CPU2000, SPEC CPU2006 workloads are an order of magnitude longer (in terms of instruction count). Additionally, SPEC CPU2006 comprises of many more memory intensive workloads that require more than 4MB of cache size for better cache performance.

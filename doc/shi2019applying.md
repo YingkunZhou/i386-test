@@ -98,8 +98,7 @@ There has been little previous work that applies machine learning to the cache r
 The most closely related solutions [27, 52] use an online perceptron [43] to improve the accuracy of cache replacement predictors.
 In particular, Teran et al.
 [27] use a perceptron predictor with a short, ordered history of program counters as an input feature.
-Glider also uses a perceptron with a history of program counters, but it differs from Teran et al.
-'s solution in its input history representation.
+Glider also uses a perceptron with a history of program counters, but it differs from Teran et al.'s solution in its input history representation.
 In particular, Glider uses an unordered history of unique PCs, which provides two benefits.
 First, because it does not include duplicate occurrences of the same PC, Glider uses an effectively longer control-flow history (20 for Glider vs. 3 for perceptron) for the same hardware budget.
 Second, by relaxing the ordering requirement among these unique PCs, Glider trains much faster than solutions that must learn the behavior of every distinct ordering in different predictor entries.

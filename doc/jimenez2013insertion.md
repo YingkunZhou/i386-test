@@ -121,6 +121,11 @@ The vertices of the graph are the recency stack positions.
 The solid edges represent change in position when a source node's block is accessed.
 The dashed edges represent the new position to which a block is shifted to accommodate a block moving into its position.
 
+<img width="830" alt="图片" src="https://user-images.githubusercontent.com/43129850/146954482-b5186427-3118-4c36-89ae-2c491ff80fa0.png">
+
+Figure 2: Transition Graph for LRU. A solid edge points to the new position for an accessed or inserted block. A dashed edge
+shows where a block is shifted when another block is moved to its position.
+
 ## 2.5 Finding A Good Placement and Promotion Vector
 
 As a proof of concept, we propose to explore the space of IPVs to find one that works best for a given set of benchmarks.

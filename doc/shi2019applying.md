@@ -104,8 +104,7 @@ In particular, Glider uses an unordered history of unique PCs, which provides tw
 First, because it does not include duplicate occurrences of the same PC, Glider uses an effectively longer control-flow history (20 for Glider vs. 3 for perceptron) for the same hardware budget.
 Second, by relaxing the ordering requirement among these unique PCs, Glider trains much faster than solutions that must learn the behavior of every distinct ordering in different predictor entries.
 
-More recently, Teran et al.
-'s perceptron was outperformed by MPPPB [27], which uses offline genetic algorithms to choose relevant features from a comprehensive list of hand-crafted features that go beyond control-flow information.
+More recently, Teran et al.'s perceptron was outperformed by MPPPB [27], which uses offline genetic algorithms to choose relevant features from a comprehensive list of hand-crafted features that go beyond control-flow information.
 Our work differs from MPPPB by identifying insights that lead to a more effective feature representation.
 In Section 5, we show that Glider outperforms MPPPB, but the use of MPPPB's features within a deep neural network model is a promising avenue for future research.
 

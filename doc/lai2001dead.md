@@ -1,0 +1,7 @@
+# Dead-block prediction & dead-block correlating prefetchers
+
+https://ieeexplore.ieee.org/abstract/document/937443
+
+## Abstract:
+
+Effective data prefetching requires accurate mechanisms to predict both "which" cache blocks to prefetch and "when" to prefetch them. This paper proposes the Dead-Block Predictors (DBPs), trace-based predictors that accurately identify "when" an Ll data cache block becomes evictable or "dead". Predicting a dead block significantly enhances prefetching lookahead and opportunity, and enables placing data directly into Ll, obviating the need for auxiliary prefetch buffers. This paper also proposes Dead-Block Correlating Prefetchers (DBCPs), that use address correlation to predict "which" subsequent block to prefetch when a block becomes evictable. A DBCP enables effective data prefetching in a wide spectrum of pointer-intensive, integer, and floating-point applications. We use cycle-accurate simulation of an out-of-order superscalar processor and memory-intensive benchmarks to show that: (1) dead-block prediction enhances prefetching lookahead at least by an order of magnitude as compared to previous techniques, (2) a DBP can predict dead blocks on average with a coverage of 90% only mispredicting 4% of the time, (3) a DBCP offers an address prediction coverage of 86% only mispredicting 3% of the time, and (4) DBCPs improve performance by 62% on average and 282% at best in the benchmarks we studied.

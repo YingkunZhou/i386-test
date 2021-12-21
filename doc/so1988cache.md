@@ -350,7 +350,7 @@ approximate a change of CPU working set.
 The next few sections provide illustrations of applying the
 idea of MRU change in several aspects of cache operations.
 
-## REPLACEMEANLTG ORITHMOFS C ACHES
+## REPLACEMENT ALGORITHMS CACHES
 
 The choice and implementation of a replacement algorithm
 in a set associative cache are important because the same

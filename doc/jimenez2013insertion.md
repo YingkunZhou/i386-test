@@ -44,6 +44,10 @@ Figure 1 shows the speedups obtained over LRU by a uniformly random sampling of 
 Clearly most of the points in this random sample are inferior to LRU, but there are some areas of improvement over LRU.
 Random search leaves significant potential undiscovered, so we use genetic algorithms to further explore the enormous search space.
 
+<img width="519" alt="图片" src="https://user-images.githubusercontent.com/43129850/146948568-fafc30b5-198d-438a-820e-ebab3d9d8452.png">
+
+Figure 1: Random Design Space Exploration for PseudoLRU Insertion and Promotion
+
 The paper is organized as follows: in Section 2 we describe the basic idea of our technique within the context of the LRU replacement policy.
 In Section 3 we give background into tree-based PseudoLRU and describe how our technique extends it.
 In Section 4 we discuss our experimental methodology, including details of our genetic algorithms, our workload neutral evaluation, and our simulation infrastructures.
@@ -83,7 +87,7 @@ This implementation requires no extra space overhead, but incurs a frighteningly
 A better implementation is to associate an integer from 0 through k - 1 with each block in a set.
 That integer gives the block's position in the recency stack.
 When blocks are moved in the stack, only the values of the integers must be changed.
-Maintaining the integers is conceptually simple, but requires an extra log2 k bits per block, or k log2 k additional bits per set to store the positions.
+Maintaining the integers is conceptually simple, but requires an extra <img src="https://render.githubusercontent.com/render/math?math=log_2k"> bits per block, or <img src="https://render.githubusercontent.com/render/math?math=klog_2k"> additional bits per set to store the positions.
 For a 16-way cache, this works out to 4 extra bits per block or 64 extra bits per set.
 
 ### 2.2 LRU Needs Improving

@@ -32,7 +32,8 @@ Recent proposals on cache insertion policies [11, 25, 28, 30] and hit promotion 
 Rather than representing recency, the LRU chain can instead be thought of as a Re-Reference Interval Prediction (RRIP) chain that represents the order in which blocks are predicted to be re-referenced.
 The block at the head of the RRIP chain is predicted to have a near-immediate rereference interval while the block at the tail of the RRIP chain is predicted to have a distant re-reference interval.
 A near-immediate re-reference interval implies that a cache block will be re-referenced sometime soon while a distant re-reference interval implies that a cache block will be re-referenced in the distant future.
-On a cache miss, the block at the tail of the RRIP chain (i.e., the block predicted to be referenced most far into the future) will be replaced1.
+On a cache miss, the block at the tail of the RRIP chain (i.e., the block predicted to be referenced most far into the future) will be replaced (<sub>We are viewing the RRIP chain like a “snake” where, for LRU, new
+cache blocks enter the head and leave at the tail.</sub>).
 
 Using the RRIP framework, LRU replacement predicts that a block filled into the cache has a near-immediate re-reference interval and thus places it at the head of the RRIP chain.
 Upon re-reference to a block, LRU updates its prediction and again anticipates that the block has a near-immediate re-reference interval.
@@ -61,7 +62,7 @@ Consequently, improving the performance of real world applications require a pra
 Scans, regardless of their length, do not receive cache hits after their initial reference.
 This is because the re-reference interval of a scan block is in the distant future.
 The situation may be different for the blocks resident in the cache when the scan first starts.
-When the data referenced after the scan is different from the data referenced before the scan, replacement decisions during the scan are irrelevant because the references to the new data cause compulsory misses2.
+When the data referenced after the scan is different from the data referenced before the scan, replacement decisions during the scan are irrelevant because the references to the new data cause compulsory misses (<sub>Compulsory misses cannot be reduced under any replacement policy.</sub>).
 However, when the data referenced after the scan belongs to the working set prior to the scan, the optimal replacement policy knows that a distant re-reference interval be applied to cache blocks belonging to the scan and a near-immediate re-reference interval be applied to cache blocks belonging to the working set.
 In doing so, the optimal replacement policy preserves the frequently referenced working set in the cache after the scan completes.
 Practical replacement policies can potentially accomplish this by using LIPstyle replacement during the course of the scan and LRU replacement in the absence of the scan.
@@ -96,7 +97,8 @@ DIP [25] addresses the cache thrashing problem by preserving some of the working
 Unfortunately, DIP only targets workloads that have a working set larger than the available cache and relies on LRU for all other workloads.
 As a result, DIP limits performance of workloads where frequent scans discard the active working from the cache.
 To illustrate this problem, Figure 2 compares the cache performance of thrash-resistant DIP to scan-resistant HYBLRU/LFU.
-HYBLRU/LFU is a hybrid cache replacement policy that uses Set Dueling [25] to dynamically choose between the scan-resistant Least Frequently Used (LFU)3 [17] replacement policy and LRU replacement.
+HYBLRU/LFU is a hybrid cache replacement policy that uses Set Dueling [25] to dynamically choose between the scan-resistant Least Frequently Used (LFU) (<sub>Access frequency is measured by using a 4-bit counter per cache block.
+All LFU counters in the set are halved whenever any counter saturates.</sub>) [17] replacement policy and LRU replacement.
 The study consists of 14 workloads each running on a 2MB LLC.
 The yaxis presents the average reduction in cache misses compared to LRU while the x-axis presents the applications and their categories.
 The application categories under study are PC games, multimedia, server, and SPEC CPU 2006.
@@ -156,7 +158,7 @@ Since chain-based LRU replacement is impractical to build in hardware for highly
 ### 4.1. Not Recently Used (NRU) Replacement
 
 The Not Recently Used (NRU) replacement policy is an approximation of LRU commonly used in modern high performance processors.
-NRU uses a single bit per cache block called the nru-bit4.
+NRU uses a single bit per cache block called the nru-bit (<sub>This paper describes NRU replacement by inverting the polarity of the bit to represent not-recently used. instead of recently used.</sub>).
 With only one bit of information, NRU allows two re-reference interval predictions: near-immediate re-reference and distant rereference.
 An nru-bit value of '0' implies that a block was recently used and the block is predicted to be re-referenced in the nearimmediate future.
 An nru-bit value of '1' implies that the block was not recently used and the block is predicted to be re-referenced in the distant future.
@@ -247,7 +249,7 @@ For non-thrashing access patterns, always using BRRIP can significantly degrade 
 In order to be robust across all cache access patterns, we propose to dynamically determine whether an application is best suited to scan-resistant SRRIP or thrash-resistant BRRIP.
 We propose Dynamic Re-reference Interval Prediction (DRRIP) that uses Set Dueling [25] to identify which replacement policy is best suited for the application.
 DRRIP dynamically chooses between scan-resistant SRRIP and thrashresistant BRRIP by using two Set Dueling Monitors (SDMs) [11].
-An SDM estimates the misses for any given policy by permanently dedicating a few sets5 of the cache to follow that policy.
+An SDM estimates the misses for any given policy by permanently dedicating a few sets(<sub>Prior work has shown that 32 sets are sufficient to estimate cache performance [11]. Throughout the paper an SDM consists of 32 sets.</sub>) of the cache to follow that policy.
 Set Dueling uses a single policy selection (PSEL) counter to determine the winning policy.
 DRRIP uses the winning policy of the two SDMs for the remaining sets of the cache.
 
@@ -408,7 +410,8 @@ At the L2 cache, SRRIP provides no significant performance gains because the L2 
 SRRIP did not degrade performance of the L1 or L2 caches.
 To ensure that SRRIP performs well at the LLC, we modified our hierarchy from a 3-level to a 2- level hierarchy by removing the L2 cache.
 For this 2-level hierarchy, both SRRIP and DRRIP outperform LRU by 4.8% and 10% respectively.
-Thus, RRIP is most applicable at the LLC where the temporal locality is filtered by smaller levels of the hierarchy7.
+Thus, RRIP is most applicable at the LLC where the temporal locality is filtered by smaller levels of the hierarchy (<sub>Recent studies [7, 18] have evaluated cache configurations where the linesize of the LLC is larger than the linesize of the L1 and L2 caches.
+For such configurations, DIP and RRIP require modifications to the hit promotion policy to filter the "false temporal locality" observed by the LLC. For example, re-references to different sectors of the large LLC cache line (due to spatial locality) should not update the LRU state while re-references to the same sector of the line should update the LRU state.</sub>).
 
 ### 6.7. Hardware Overhead and Design Changes
 

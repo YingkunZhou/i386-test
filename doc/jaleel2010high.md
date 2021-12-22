@@ -6,6 +6,15 @@
 
 **Keywords** Replacement, Scan Resistance, Thrashing, Shared Cache
 
+## comments
+
+> **jimenez2013insertion.md**
+> We propose a novel last-level cache replacement algorithm with approximately the same complexity and storage requirements as tree-based PseudoLRU, but with performance matching state of the art techniques such as dynamic re-reference interval prediction (DRRIP).
+> all SPEC CPU 2006 benchmarks 5.41% speedup; On a memory-intensive subset of SPEC 15.6%.
+> DRRIP uses 2 bits per block, or 16KB.
+> DRRIP requires twice as much storage overhead as our technique.
+> Jaleel et al. propose re-reference interval prediction (RRIP) [13]. The paper introduces several techniques, but the main contribution of the work is Dynamic RRIP (DRRIP). Each block has associated with it a 2-bit re-reference prediction value (RRPV). An RRPV is roughly analogous to a coarse-grained position in an LRU recency stack, although more than one block can have the same RRPV. When a block is accessed, its RRPV is updated to 0. On a miss, a victim with an RRPV of 3 is chosen. If there is no such block, all blocks' RRPVs are incremented until an RRPV of 3 is found. DRRIP uses set-dueling to choose between two techniques: SRRIP and BRRIP. SRRIP inserts blocks with an initial RRPV of 2. BRRIP usually inserts with an RRPV of 3, but with low probability will insert with an RRPV of 1. To our knowledge, DRRIP is the most effcient replacement policy in the literature that uses no additional information other than the stream of block addresses accessing cache sets. DRRIP requires 2 extra bits per cache block, making it the most effcient of the published high-performance cache replacement schemes.
+
 ## ABSTRACT
 
 Practical cache replacement policies attempt to emulate optimal replacement by predicting the re-reference interval of a cache block.

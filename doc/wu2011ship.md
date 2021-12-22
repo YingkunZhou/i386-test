@@ -1,6 +1,10 @@
 # SHiP: signature-based hit predictor for high performance caching
 
-**Categories and Subject Descriptors** B.8.3 [Hardware]: Memory Structures **General Terms** Design, Performance **Keywords** Replacement, Reuse Distance Prediction, Shared Cache
+**Categories and Subject Descriptors** B.8.3 [Hardware]: Memory Structures
+
+**General Terms** Design, Performance
+
+**Keywords** Replacement, Reuse Distance Prediction, Shared Cache
 
 ## ABSTRACT
 

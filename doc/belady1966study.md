@@ -1,0 +1,5 @@
+# A study of replacement algorithms for a virtual-storage computer
+
+## Abstract:
+
+One of the basic limitations of a digital computer is the size of its available memory. 1 In most cases, it is neither feasible nor economical for a user to insist that every problem program fit into memory. The number of words of information in a program often exceeds the number of cells (i.e., word locations) in memory. The only way to solve this problem is to assign more than one program word to a cell. Since a cell can hold only one word at a time, extra words assigned to the cell must be held in external storage. Conventionally, overlay techniques are employed to exchange memory words and external-storage words whenever needed; this, of course, places an additional planning and coding burden on the programmer. For several reasons, it would be advantageous to rid the programmer of this function by providing him with a “virtual” memory larger than his program. An approach that permits him to use a sufficiently large address range can accomplish this objective, assuming that means are provided for automatic execution of the memory-overlay functions.

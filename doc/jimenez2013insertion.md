@@ -151,11 +151,19 @@ A block referenced in the LRU position is moved to position 11.
 A block referenced in position 2 is moved to position 1, etc.
 Figure 3 illustrates the transition graph for this vector.
 
+<img width="830" alt="图片" src="https://user-images.githubusercontent.com/43129850/147019835-d080ee98-9ec4-4018-87c4-848b11b4de30.png">
+
+Figure 3: Transition Graph for Vector [ 0 0 1 0 3 0 1 2 1 0 5 1 0 0 1 11 13 ]
+
 The vector specifies some counterintuitive actions.
 For instance a block referenced in position 5 is moved to MRU, while a block referenced in position 4 is moved to position 3.
 Note that blocks can also move to new positions as a consequence of being shifted to accommodate other blocks; e.g., a block in position 3 may move to MRU by being first being shifted to position 4 to accommodate the promotion of another block, then moved to position 0 from 4.
 Thus, some aspects of the vector go against intuition.
 However, recall that it is intuition that led to the LRU policy, which is often no better than random (see Figure 4) so for this work we will suspend our intuition in favor of that of the machine.
+
+<img width="834" alt="图片" src="https://user-images.githubusercontent.com/43129850/147019956-841bc79b-bb76-4cec-9a9d-063213cd6090.png">
+
+Figure 4: Speedup for the Vector [ 0 0 1 0 3 0 1 2 1 0 5 1 0 0 1 11 13 ]
 
 ### 2.6 Performance Improvement
 
@@ -192,6 +200,8 @@ Figures 5 and 6 give pseudocode for the algorithms to find the PseudoLRU (PLRU) 
 Although the PLRU block is not always the LRU block, it is guaranteed not to be the MRU block and is very likely not to have been used for quite a while because in order to become the PLRU block there would have to have been several intervening promotions to other blocks.
 In practice, PLRU provides performance almost equivalent to full LRU.
 
+<img width="505" alt="图片" src="https://user-images.githubusercontent.com/43129850/147020621-77d1d633-e012-42e8-b25b-4c5900345683.png">
+
 PseudoLRU is cheaper than LRU.
 Consider a k-way set associative cache, and assume k is a power of 2.
 A complete binary tree with k leaf nodes has <img src="https://render.githubusercontent.com/render/math?math=\sum^{\lfloor log_2k\rfloor - 1}_{d=0} = k - 1"> internal nodes.
@@ -199,7 +209,7 @@ PseudoLRU requires storing one plru bit for each of the internal nodes.
 The structure of the complete binary tree is implicit in the indexing of this array of plru bits, so the only storage needed to represent the tree is the plru bits themselves.
 For a 16-way set associative cache, this is 15 bits per set as opposed to 64 bits per set for full LRU, a savings of 77%.
 In general, PseudoLRU reduces the number of bits required by a factor of <img src="https://render.githubusercontent.com/render/math?math=log_2k"> over LRU.
-PseudoLRU is also less complex to implement: an insertion or promotion can change only up to <img src="https://render.githubusercontent.com/render/math?math=log_2k"> plru bits on the path from the root to the leaf, as opposed to full LRU which can change all k log2 k bits when a block is inserted or promoted from LRU to MRU.
+PseudoLRU is also less complex to implement: an insertion or promotion can change only up to <img src="https://render.githubusercontent.com/render/math?math=log_2k"> plru bits on the path from the root to the leaf, as opposed to full LRU which can change all <img src="https://render.githubusercontent.com/render/math?math=klog_2k"> bits when a block is inserted or promoted from LRU to MRU.
 Thus, PseudoLRU is used in practice.
 
 ### 3.2 PseudoLRU Recency Stack

@@ -247,9 +247,9 @@ Delaying updates by a few cycles has a negligible impact on energy savings since
 This section describes two state-of-the-art approaches, which also rely on turning off cache lines to save leakage energy.
 They are extensively evaluated against our proposed technique, IATAC, in Section 4.
 
-### 3.2.1 Cache Decay. This work [Hu et al. 2002; Kaxiras et al. 2001] relies on
+### 3.2.1 Cache Decay.
 
-the observation that for L1 data caches it is very common to have all the hits to a cache line concentrated in a short period of time.
+This work [Hu et al. 2002; Kaxiras et al. 2001] relies on the observation that for L1 data caches it is very common to have all the hits to a cache line concentrated in a short period of time.
 They are then followed by a long period without any access to the cache line, which is then finally replaced.
 Based on this observation they propose two mechanisms.
 

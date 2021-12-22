@@ -379,7 +379,7 @@ Since the majority of performance gains is achieved by a 3-bit RRPV register, we
 
 ### 6.4. DRRIP Performance
 
-Figure 8 presents the performance of 2-bit and 3-bit DRRIP6.
+Figure 8 presents the performance of 2-bit and 3-bit DRRIP (<sub>We use 32-entry SDMs, 10-bit PSEL counter and <img src="https://render.githubusercontent.com/render/math?math=\epsilon=1/32">. [11, 25]</sub>).
 Figure 8a shows that DRRIP significantly improves cache performance for SPEC CPU2006 workloads sphinx3, hmmer, and mcf.
 These workloads have a knee in the working set that is slightly larger than a 2MB cache (see Figure 4).
 PC games and multimedia workloads also benefit from a reduction in cache misses.

@@ -289,14 +289,14 @@ We discuss the techniques used to generate the insertion and promotion vectors (
 
 It is not immediately clear how to build a good IPV algorithmically.
 One idea is to simulate the effect of different IPVs over a set of workload traces, retaining the IPV that maximizes performance.
-With 16-way associativity, there are <img src="https://render.githubusercontent.com/render/math?math=1617 = 2.95 \times 10^20"> IPVs of 17 entries (16 promotion + 1 insertion) with 16 possible values per entry.
+With 16-way associativity, there are <img src="https://render.githubusercontent.com/render/math?math=16^17 = 2.95 \times 10^20"> IPVs of 17 entries (16 promotion + 1 insertion) with 16 possible values per entry.
 One simple approach is to randomly search the design space.
 We allowed each value in the vector take a uniformly pseudo-random integer value from 0 through 15.
 We evaluated each combination using the fitness function described below, leading to Figure 1 showing the speedup of each of 15,000 IPVs sorted in ascending order of speedup.
 However, this very small sample of the design space took three days of simulation time and left significant potential undiscovered.
 Exhaustively searching the space of IPVs is impractical, so we turn to genetic algorithms to find good IPVs.
 
-### Using A Genetic Algorithm to Generate IPVs
+### 4.2 Using A Genetic Algorithm to Generate IPVs
 
 Genetic algorithms are a well-known general optimization technique [9].
 The basic idea is that a population of potential candidates are mated and mutated with the best individuals being propagated to the next generation.
@@ -305,7 +305,7 @@ After many generations, the algorithm tends to converge on a good solution.
 In the case of IPVs, the population consists of many randomly-generated IPVs.
 Individual IPVs are mated with crossover, i.e., elements 0..k of one vector and k + 1..16 of another vector are put into corresponding positions of a new vector, where k is chosen randomly.
 For mutation, for each new IPV, with a 5% probability, a randomly chosen element of the vector is replaced with a random integer between 0 and 15.
-To generate a vector, we start with a population size of 20,000 in the first generation and drop the size to 4,000 for subsequent generations.
+To generate a vector, we start with a population size of 20000 in the first generation and drop the size to 4000 for subsequent generations.
 We generate many such vectors through many runs in parallel.
 These vectors are used for the single-vector results.
 

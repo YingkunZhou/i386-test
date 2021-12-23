@@ -78,7 +78,9 @@ In this section, we will give an overview of how counter-based replacement algor
 
 ### 3.1. Overview
 
-![1524130-fig-1-source-large](https://user-images.githubusercontent.com/43129850/146643059-08e5db7f-4592-4718-b940-14ad6af5b633.gif)
+<p align="center">
+<img width="800" alt="图片" src="https://user-images.githubusercontent.com/43129850/146643059-08e5db7f-4592-4718-b940-14ad6af5b633.gif">
+</p>
 
 Figure 1: The life cycle of a cache line A, using terms defined in [15].
 
@@ -102,7 +104,9 @@ For example, <img src="https://render.githubusercontent.com/render/math?math=\de
 Like-wise, <img src="https://render.githubusercontent.com/render/math?math=LT_{thd}"> is conservatively chosen as the maximum live times of the prior generation.
 This is a unique feature of counter-based predictors: the behavior of a cache line can be compactly summarized in a single <img src="https://render.githubusercontent.com/render/math?math=\delta_{thd}"> or <img src="https://render.githubusercontent.com/render/math?math=LT_{thd}">, resulting in compact prediction information.
 
-![1524130-fig-2-source-large](https://user-images.githubusercontent.com/43129850/146643089-02ef9ecc-fd18-446e-a540-96e0bd1bec71.gif)
+<p align="center">
+<img width="800" alt="图片" src="https://user-images.githubusercontent.com/43129850/146643089-02ef9ecc-fd18-446e-a540-96e0bd1bec71.gif"
+</p>
 
 Figure 2: Access interval distribution.
 The y-axis represents the number of L2 cache accesses to the same set containing the block.
@@ -127,7 +131,9 @@ The complete data will be presented and discussed later in Table 1.
 
 #### 3.2.1. Storage Organization and Overhead
 
-![1524130-fig-3-source-large](https://user-images.githubusercontent.com/43129850/146643102-77883487-5a7e-4d18-b69e-d699dc202fbb.gif)
+<p align="center">
+<img width="300" alt="图片" src="https://user-images.githubusercontent.com/43129850/146643102-77883487-5a7e-4d18-b69e-d699dc202fbb.gif">
+</p>
 
 Figure 3: Storage organization and overhead of AIP.
 
@@ -142,7 +148,9 @@ The third and fourth fields are the counter thresholds, computed by taking the m
 The fifth field is a single confidence bit (conf) that if set, indicates that the block can expire and be considered for replacement.
 If it is not set, the block cannot expire.
 
-![1524130-table-1-source-large](https://user-images.githubusercontent.com/43129850/146643124-0e9005cb-6548-46ec-911f-b0ce9cec8e5a.gif)
+<p align="center">
+<img width="600" alt="图片" src="https://user-images.githubusercontent.com/43129850/146643124-0e9005cb-6548-46ec-911f-b0ce9cec8e5a.gif">
+</p>
 
 Table 1: Profile of the Counter Threshold Values in the Counter Prediction Tables for AIP and LvP.
 The Counter is Represented as the Number of Accesses in the Same Set for AIP, and as the Number of Accesses to the Self Line for LvP.
@@ -168,8 +176,10 @@ The total table size is <img src="https://render.githubusercontent.com/render/ma
 Also, since the table is only accessed on a cache miss, and since its access can be overlapped with the cache miss latency, it is not latency sensitive.
 Furthermore, since the table is small, it can be located on chip.
 
-![1524130-fig-4-source-large](https://user-images.githubusercontent.com/43129850/146643134-8f91cb3a-6405-4ec7-b442-1fe4d92e820c.gif)
-
+<p align="center">
+<img width="600" alt="图片" src="https://user-images.githubusercontent.com/43129850/146643134-8f91cb3a-6405-4ec7-b442-1fe4d92e820c.gif">
+</p>
+  
 Figure 4: AIP algorithm implementation.
 
 The AIP algorithm implementation is shown in Figure 4.
@@ -215,8 +225,10 @@ Therefore, their latencies can be completely hidden.
 In addition, the AIP algorithm only involves several 4-bit increment and compare operations.
 Therefore, they can be implemented in hardware easily.
 
-![1524130-fig-5-source-large](https://user-images.githubusercontent.com/43129850/146643146-84f40990-7a30-4ed7-ac31-4d357ee334d0.gif)
-
+<p align="center">
+<img width="863" alt="图片" src="https://user-images.githubusercontent.com/43129850/146643146-84f40990-7a30-4ed7-ac31-4d357ee334d0.gif">
+</p>
+  
 Figure 5: Example of AIP implementation for an 8-way set.
 Blocks are sorted from the MRU block (left) to the LRU block (right).
 The initial states (a), the states after an access (hit) to block D (b), and the states after an access (miss) to block J (c).
@@ -251,8 +263,10 @@ Without the maxCpresent field, the storage overhead in each cache line is slight
 
 #### 3.3.2. Algorithm Details
 
-![1524130-fig-6-source-large](https://user-images.githubusercontent.com/43129850/146643185-05e9ff70-1287-4e62-9468-a44aaf730c2f.gif)
-
+<p align="center">
+<img width="863" alt="图片" src="https://user-images.githubusercontent.com/43129850/146643185-05e9ff70-1287-4e62-9468-a44aaf730c2f.gif">
+</p>
+  
 Figure 6: LvP algorithm implementation.
 
 Figure 6 shows the LvP algorithm steps.
@@ -407,7 +421,7 @@ Also note the coverage and accuracy will not be directly proportional to perform
 
 ### 5.2. Performance of Counter-Based Algorithms
 
-![1524130-fig-8-source-large](https://user-images.githubusercontent.com/43129850/146643261-b33e59e9-189c-4a36-9eba-a3cd85dd29e3.gif)
+![](https://user-images.githubusercontent.com/43129850/146643261-b33e59e9-189c-4a36-9eba-a3cd85dd29e3.gif)
 
 Figure 8: Performance improvement results of various replacement algorithms.
 
@@ -436,7 +450,7 @@ This is lower than the speedups achieved by our counter-based algorithms but hig
 The performance improvement from increasing the cache size is insignificant (4%) justifying the extra storage overhead needed by our counter-based algorithms.
 Therefore, considering that our algorithms have low hardware complexity, the results show that they are promising techniques to implement.
 
-![1524130-fig-9-source-large](https://user-images.githubusercontent.com/43129850/146643275-a98185af-dfd5-4c30-9b1d-88193a7ad13b.gif)
+![](https://user-images.githubusercontent.com/43129850/146643275-a98185af-dfd5-4c30-9b1d-88193a7ad13b.gif)
 
 Figure 9: Fraction of lines evicted by AIP versus by LRU.
 
@@ -448,7 +462,7 @@ Thus, the lower the sum, the fewer the cache misses.
 The figure shows that on average, 17% of the original cache misses are eliminated, with the biggest gain being for art, gee, and mgrid.
 In addition, the fraction of evictions triggered by the AIP algorithms is high and ranges between 32% to 95%, with an average of 68%.
 
-![1524130-fig-10-source-large](https://user-images.githubusercontent.com/43129850/146643292-5eea23d8-c97e-4fc8-bacb-67d97a3f60bc.gif)
+<img width="863" alt="图片" src="https://user-images.githubusercontent.com/43129850/146643292-5eea23d8-c97e-4fc8-bacb-67d97a3f60bc.gif">
 
 Figure 10: Stack distance profile of eon and art.
 
@@ -470,7 +484,7 @@ This is why applications in group B do not show performance improvement: one typ
 
 ### 5.3. Sensitivity to Cache Parameters
 
-![1524130-table-4-source-large](https://user-images.githubusercontent.com/43129850/146643303-5cd27189-641c-41ec-a7d7-ae24d024fb60.gif)
+<img width="863" alt="图片" src="https://user-images.githubusercontent.com/43129850/146643303-5cd27189-641c-41ec-a7d7-ae24d024fb60.gif">
 
 Table 4: Minimum, Average, and Maximum Speedup of AIP for Different L2 Cache Configurations for Applications in Group A.
 

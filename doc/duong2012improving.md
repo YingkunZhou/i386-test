@@ -254,7 +254,7 @@ W is the set associativity.
 A line with an RD larger than <img src="https://render.githubusercontent.com/render/math?math=d_p"> is called a long line and <img src="https://render.githubusercontent.com/render/math?math=N_L"> is the number of long lines.
 
 A function <img src="https://render.githubusercontent.com/render/math?math=E(d_p)"> approximating the hit rate is derived as following.
-Given a set of counters <img src="https://render.githubusercontent.com/render/math?math=\{N_i\}"> representing the RDD and <img src="https://render.githubusercontent.com/render/math?math=N_t,N_L = N_t−\sum^{d_p}_{i=1}N_i">.
+Given a set of counters <img src="https://render.githubusercontent.com/render/math?math=\{N_i\}"> representing the RDD and <img src="https://render.githubusercontent.com/render/math?math=N_t,N_L = N_t-\sum^{d_p}_{i=1}N_i">.
 
 Let us use the concept of occupancy defined in Sec. 2.3.
 A line with an RD of <img src="https://render.githubusercontent.com/render/math?math=i,i\leq d_p">, has an occupancy of i and the line is hit after i accesses.
@@ -368,7 +368,7 @@ The computed PD is used by the cache to set the initial value of remaining PD, *
 Storing the **RPD** that can range up to <img src="https://render.githubusercontent.com/render/math?math=d_{max}=256"> requires <img src="https://render.githubusercontent.com/render/math?math=n_c=8"> bits per line.
 This overhead can be reduced by using an increment, the Distance Step <img src="https://render.githubusercontent.com/render/math?math=S_d">.
 An update of RPDs is done once every <img src="https://render.githubusercontent.com/render/math?math=S_d"> accesses to the set using a per-set counter (and counting bypasses).
-An access causing the counter to reach <img src="https://render.githubusercontent.com/render/math?math=S_d−1"> triggers the decrement of all RPDs in the set.
+An access causing the counter to reach <img src="https://render.githubusercontent.com/render/math?math=S_d-1"> triggers the decrement of all RPDs in the set.
 This does not have to be done in parallel but can be done sequentially to reduce complexity.
 The maximum value of <img src="https://render.githubusercontent.com/render/math?math=S_d"> is <img src="https://render.githubusercontent.com/render/math?math=\frac{d_{max}}{2^{n_c}}">.
 
@@ -391,13 +391,13 @@ The computation is based on a new shared LLC hit rate model that is a function o
 The numerator and denominator in Eq. (1) are <img src="https://render.githubusercontent.com/render/math?math=H(d_p)">, the number of hits, and <img src="https://render.githubusercontent.com/render/math?math=A(d_p)/W">, the number of accesses.
 They need to be computed per thread when multiple threads access the shared cache.
 A thread t has <img src="https://render.githubusercontent.com/render/math?math=H_t(d^{(t)}_p)"> hits and <img src="https://render.githubusercontent.com/render/math?math=A_t(d^{(t)}_p)/W"> accesses for a protecting distance of <img src="https://render.githubusercontent.com/render/math?math=d^{(t)}_p">.
-The total number of hits and accesses for T threads are <img src="https://render.githubusercontent.com/render/math?math=Hits(d^{(t)}_p)=\sum^{T-1}_{t=0}H_t(d^{(t)}_p)"> and Accesses <img src="https://render.githubusercontent.com/render/math?math=(d^{(t)}_p)=\sum^{T−1}_{t=0}A_t(d^{(t)}_p)/W">, respectively.
+The total number of hits and accesses for T threads are <img src="https://render.githubusercontent.com/render/math?math=Hits(d^{(t)}_p)=\sum^{T-1}_{t=0}H_t(d^{(t)}_p)"> and Accesses <img src="https://render.githubusercontent.com/render/math?math=(d^{(t)}_p)=\sum^{T-1}_{t=0}A_t(d^{(t)}_p)/W">, respectively.
 The multi-core function <img src="https://render.githubusercontent.com/render/math?math=E_m"> is <img src="https://render.githubusercontent.com/render/math?math=E_m=Hits/(Accesses * W)">.
-Using a vector <img src="https://render.githubusercontent.com/render/math?math=\overrightarrow{d}_p=[d^{(0)}_p,\dots,d^{(T−1)}_p]"> to denote an ordered set of <img src="https://render.githubusercontent.com/render/math?math=d^{(t)}_p">, the multicore hit rate approximation as a function of <img src="https://render.githubusercontent.com/render/math?math=\overrightarrow{d}_p"> is:
+Using a vector <img src="https://render.githubusercontent.com/render/math?math=\overrightarrow{d}_p=[d^{(0)}_p,\dots,d^{(T-1)}_p]"> to denote an ordered set of <img src="https://render.githubusercontent.com/render/math?math=d^{(t)}_p">, the multicore hit rate approximation as a function of <img src="https://render.githubusercontent.com/render/math?math=\overrightarrow{d}_p"> is:
 
 <img src="https://render.githubusercontent.com/render/math?math=E_{m}\left(\overrightarrow{d}_{p}\right)={\sum\limits_{t=0}^{T-1}H_{t}\left(d_{p}^{(t)}\right)\over \sum\limits_{t=0}^{T-1}A_{t}\left(d_{p}^{(t)}\right)} \qquad (2)">
 
-A vector <img src="https://render.githubusercontent.com/render/math?math=\overrightarrow{PD}=[PD^{(0)},\dots ,PD^{(T−1)}]"> that maximizes <img src="https://render.githubusercontent.com/render/math?math=E_m(\overrightarrow{PD})"> defines the protecting distances <img src="https://render.githubusercontent.com/render/math?math=PD^{(t)}"> of each thread.
+A vector <img src="https://render.githubusercontent.com/render/math?math=\overrightarrow{PD}=[PD^{(0)},\dots ,PD^{(T-1)}]"> that maximizes <img src="https://render.githubusercontent.com/render/math?math=E_m(\overrightarrow{PD})"> defines the protecting distances <img src="https://render.githubusercontent.com/render/math?math=PD^{(t)}"> of each thread.
 
 A heuristic is used to find the vector <img src="https://render.githubusercontent.com/render/math?math=\overrightarrow{PD}"> instead of an an exhaustive search.
 It is based on three observations.

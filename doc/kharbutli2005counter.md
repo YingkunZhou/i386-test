@@ -89,20 +89,20 @@ It begins when A is first accessed after it is brought into the cache, either by
 While in the cache, A is accessed several times before it is evicted.
 The time between the placement of A in the cache until it is evicted is called the generation time, which is further divided into the live time (LT) and the dead time.
 The live time of a line A is the time from the placement of A to the last access of A, whereas the dead time is the time from the last access of A to the time A is evicted from the cache.
-The time between two consecutive accesses to A is called the access interval (<img src="https://render.githubusercontent.com/render/math?math=\delta">).
+The time between two consecutive accesses to A is called the access interval (<img src="https://render.githubusercontent.com/render/math?math=\Delta">).
 
 There are two counter-based replacement algorithms that we propose.
 The first algorithm, Access Interval Predictor (AIP), counts the number of accesses to the same set during an access interval of a line.
 The reason for counting only the accesses to the same set (as opposed to accesses to any set in the cache) is to avoid using large counters to count many more accesses, and to avoid behavior interference from other sets.
-If the event count since the last access to A exceeds an access interval threshold (<img src="https://render.githubusercontent.com/render/math?math=\delta_{thd}">), the line expires and becomes a candidate for replacement.
+If the event count since the last access to A exceeds an access interval threshold (<img src="https://render.githubusercontent.com/render/math?math=\Delta_{thd}">), the line expires and becomes a candidate for replacement.
 The second approach, Live Time Predictor (LvP), bases its prediction on the live time of the line.
 For a line A, it counts the number of accesses to itself during a single generation.
 If the event count since A's placement in the cache reaches the live time threshold (<img src="https://render.githubusercontent.com/render/math?math=LT_{thd}">), the line expires and becomes a candidate for replacement.
 
 The thresholds can be learned from the past behavior of the line.
-For example, <img src="https://render.githubusercontent.com/render/math?math=\delta_{thd}"> is conservatively chosen as the maximum of all access intervals of the prior and current generations.
+For example, <img src="https://render.githubusercontent.com/render/math?math=\Delta_{thd}"> is conservatively chosen as the maximum of all access intervals of the prior and current generations.
 Like-wise, <img src="https://render.githubusercontent.com/render/math?math=LT_{thd}"> is conservatively chosen as the maximum live times of the prior generation.
-This is a unique feature of counter-based predictors: the behavior of a cache line can be compactly summarized in a single <img src="https://render.githubusercontent.com/render/math?math=\delta_{thd}"> or <img src="https://render.githubusercontent.com/render/math?math=LT_{thd}">, resulting in compact prediction information.
+This is a unique feature of counter-based predictors: the behavior of a cache line can be compactly summarized in a single <img src="https://render.githubusercontent.com/render/math?math=\Delta_{thd}"> or <img src="https://render.githubusercontent.com/render/math?math=LT_{thd}">, resulting in compact prediction information.
 
 <p align="center">
 <img width="800" alt="图片" src="https://user-images.githubusercontent.com/43129850/146643089-02ef9ecc-fd18-446e-a540-96e0bd1bec71.gif"
@@ -179,7 +179,7 @@ Furthermore, since the table is small, it can be located on chip.
 <p align="center">
 <img width="600" alt="图片" src="https://user-images.githubusercontent.com/43129850/146643134-8f91cb3a-6405-4ec7-b442-1fe4d92e820c.gif">
 </p>
-  
+
 Figure 4: AIP algorithm implementation.
 
 The AIP algorithm implementation is shown in Figure 4.
@@ -228,7 +228,7 @@ Therefore, they can be implemented in hardware easily.
 <p align="center">
 <img width="863" alt="图片" src="https://user-images.githubusercontent.com/43129850/146643146-84f40990-7a30-4ed7-ac31-4d357ee334d0.gif">
 </p>
-  
+
 Figure 5: Example of AIP implementation for an 8-way set.
 Blocks are sorted from the MRU block (left) to the LRU block (right).
 The initial states (a), the states after an access (hit) to block D (b), and the states after an access (miss) to block J (c).
@@ -266,7 +266,7 @@ Without the maxCpresent field, the storage overhead in each cache line is slight
 <p align="center">
 <img width="863" alt="图片" src="https://user-images.githubusercontent.com/43129850/146643185-05e9ff70-1287-4e62-9468-a44aaf730c2f.gif">
 </p>
-  
+
 Figure 6: LvP algorithm implementation.
 
 Figure 6 shows the LvP algorithm steps.

@@ -1,0 +1,5 @@
+# Cache replacement based on reuse-distance prediction
+
+## Abstract:
+
+Several cache management techniques have been proposed that indirectly try to base their decisions on cacheline reuse-distance, like Cache Decay which is a postdiction of reuse-distances: if a cacheline has not been accessed for some ldquodecay intervalrdquo we know that its reuse-distance is at least as large as this decay interval. In this work, we propose to directly predict reuse-distances via instruction-based (PC) prediction and use this information for cache level optimizations. In this paper, we choose as our target for optimization the replacement policy of the L2 cache, because the gap between the LRU and the theoretical optimal replacement algorithm is comparatively large for L2 caches. This indicates that, in many situations, there is ample room for improvement. We evaluate our reusedistance based replacement policy using a subset of the most memory intensive SPEC2000 and our results show significant benefits across the board.

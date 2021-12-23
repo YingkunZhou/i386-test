@@ -278,8 +278,10 @@ Here <img src="https://render.githubusercontent.com/render/math?math=E(d_p)"> is
 
 Substituting the expressions for <img src="https://render.githubusercontent.com/render/math?math=L_i"> and <img src="https://render.githubusercontent.com/render/math?math=L_L"> in the equation for <img src="https://render.githubusercontent.com/render/math?math=E(d_p)"> results in
 
+<p align="center">
 <img src="https://render.githubusercontent.com/render/math?math=E(d_{p})\approx \frac{\sum_{i=1}^{d_{p}} N_{i}}{\sum_{i=1}^{d_{p}}(N_{i} * i)+\pm (N_{t}-\sum_{i=1}^{d_{p}}N_{i})*(d_{p}+\pm d_{e})} \qquad (1)">
-
+</p>
+  
 Finally, the <img src="https://render.githubusercontent.com/render/math?math=d_e"> is a function of cache associativity and program behavior.
 It has an impact on <img src="https://render.githubusercontent.com/render/math?math=E(d_p)"> only when the <img src="https://render.githubusercontent.com/render/math?math=d_p"> is small.
 It has been experimentally determined that it can be set to a constant equal to W. This is another reason why <img src="https://render.githubusercontent.com/render/math?math=E(d_p)"> is an approximation of the hit rate.
@@ -378,7 +380,7 @@ A number of hardware parameters are used in the PDP: (1) the RD sampler size, (2
 The choice of these parameter values impacts both the hardware overhead and the cache performance.
 Sec. 6.1 presents a design space exploration of these parameters.
 
-##### A PD-BASED CACHE PARTITIONING POLICY
+## A PD-BASED CACHE PARTITIONING POLICY
 
 All high-performance multi-core processors today use a shared LLC.
 The shared LLC can benefit significantly from (cooperative) cache partitioning.
@@ -395,8 +397,10 @@ The total number of hits and accesses for T threads are <img src="https://render
 The multi-core function <img src="https://render.githubusercontent.com/render/math?math=E_m"> is <img src="https://render.githubusercontent.com/render/math?math=E_m=Hits/(Accesses * W)">.
 Using a vector <img src="https://render.githubusercontent.com/render/math?math=\overrightarrow{d}_p=[d^{(0)}_p,\dots,d^{(T-1)}_p]"> to denote an ordered set of <img src="https://render.githubusercontent.com/render/math?math=d^{(t)}_p">, the multicore hit rate approximation as a function of <img src="https://render.githubusercontent.com/render/math?math=\overrightarrow{d}_p"> is:
 
-<img src="https://render.githubusercontent.com/render/math?math=E_{m}\left(\overrightarrow{d}_{p}\right)={\sum\limits_{t=0}^{T-1}H_{t}\left(d_{p}^{(t)}\right)\over \sum\limits_{t=0}^{T-1}A_{t}\left(d_{p}^{(t)}\right)} \qquad (2)">
-
+<p align="center">
+<img src="https://render.githubusercontent.com/render/math?math=E_{m}(\overrightarrow{d}_{p})=\frac{\sum_{t=0}^{T-1}H_{t}(d_{p}^{(t)})}{\sum_{t=0}^{T-1}A_{t}(d_{p}^{(t)})} \qquad (2)">
+</p>
+  
 A vector <img src="https://render.githubusercontent.com/render/math?math=\overrightarrow{PD}=[PD^{(0)},\dots ,PD^{(T-1)}]"> that maximizes <img src="https://render.githubusercontent.com/render/math?math=E_m(\overrightarrow{PD})"> defines the protecting distances <img src="https://render.githubusercontent.com/render/math?math=PD^{(t)}"> of each thread.
 
 A heuristic is used to find the vector <img src="https://render.githubusercontent.com/render/math?math=\overrightarrow{PD}"> instead of an an exhaustive search.
@@ -765,15 +769,19 @@ The performance evaluation of **PDP** shows that it outperforms existing managem
 
 ## A RESULTS FOR SPEC CPU2006 BENCHMARKS
 
+<p align="center">
 <img width="863" alt="图片" src="https://user-images.githubusercontent.com/43129850/146160425-6b4f2940-9fda-4c70-9510-cb67727ce6ed.png">
-
+</p>
+  
 Table 3 shows the PDs of the benchmarks used in this paper.
 The first two columns are for the static PDP (see Sec. 2) with and without bypass (B and NB).
 The third column shows the PDs of the dynamic PDP with a full RD sampler (see Sec. 6.1).
 The last four columns are the PDs with a real RD sampler and different values of <img src="https://render.githubusercontent.com/render/math?math=S_c"> (see Sec. 6.1).
 These results were collected at the end of the 1B instruction execution window.
 
-![6493636-fig-13-source-large](https://user-images.githubusercontent.com/43129850/146160566-0b910dc8-2946-4eb2-9083-51bdce4f8b2e.gif)
+<p align="center">
+<img width="863" alt="图片" src="https://user-images.githubusercontent.com/43129850/146160566-0b910dc8-2946-4eb2-9083-51bdce4f8b2e.gif">
+</p>
 
 Figure 13.
 The RDDs, modeled and actual hit rates of SPEC CPU2006 benchmarks

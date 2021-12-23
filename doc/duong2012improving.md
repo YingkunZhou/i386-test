@@ -97,12 +97,12 @@ For single-core replacement PDP was compared to DIP, DRRIP, EELRU and sampling d
 Shared cache partitioning for multi-core processors was compared to TA-DRRIP, UCP and PIPP.
 
 The rest of the paper is organized as follows.
-The PD concept is defined in Sec. 2 together with a hit rate model to quantitatively relate the PD and the RDD.
-The hardware design is in Sec. 3.
-The hit rate model for multi-core cache partitioning is defined in Sec. 4.
-The experimental methodology is in Sec. 5.
-The experimental results are in Sec. 6.
-Prior work is discussed in Sec. 7.
+The PD concept is defined in Sec.2 together with a hit rate model to quantitatively relate the PD and the RDD.
+The hardware design is in Sec.3.
+The hit rate model for multi-core cache partitioning is defined in Sec.4.
+The experimental methodology is in Sec.5.
+The experimental results are in Sec.6.
+Prior work is discussed in Sec.7.
 Appendix A reports results for SPEC CPU2006 benchmarks.
 
 ## SINGLE-CORE PROTECTING DISTANCE

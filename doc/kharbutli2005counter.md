@@ -226,7 +226,7 @@ In addition, the AIP algorithm only involves several 4-bit increment and compare
 Therefore, they can be implemented in hardware easily.
 
 <p align="center">
-<img width="863" alt="图片" src="https://user-images.githubusercontent.com/43129850/146643146-84f40990-7a30-4ed7-ac31-4d357ee334d0.gif">
+<img width="600" alt="图片" src="https://user-images.githubusercontent.com/43129850/146643146-84f40990-7a30-4ed7-ac31-4d357ee334d0.gif">
 </p>
 
 Figure 5: Example of AIP implementation for an 8-way set.
@@ -450,8 +450,10 @@ This is lower than the speedups achieved by our counter-based algorithms but hig
 The performance improvement from increasing the cache size is insignificant (4%) justifying the extra storage overhead needed by our counter-based algorithms.
 Therefore, considering that our algorithms have low hardware complexity, the results show that they are promising techniques to implement.
 
-![](https://user-images.githubusercontent.com/43129850/146643275-a98185af-dfd5-4c30-9b1d-88193a7ad13b.gif)
-
+<p align="center">
+<img width="800" alt="图片" src="https://user-images.githubusercontent.com/43129850/146643275-a98185af-dfd5-4c30-9b1d-88193a7ad13b.gif">
+</p>
+  
 Figure 9: Fraction of lines evicted by AIP versus by LRU.
 
 To investigate the performance better, Figure 9 shows the fraction of evictions that are triggered by the counter-based replacement algorithms (Predicted), and ones that are triggered by the LRU replacement algorithm (LRU) when AIP is implemented.
@@ -462,8 +464,10 @@ Thus, the lower the sum, the fewer the cache misses.
 The figure shows that on average, 17% of the original cache misses are eliminated, with the biggest gain being for art, gee, and mgrid.
 In addition, the fraction of evictions triggered by the AIP algorithms is high and ranges between 32% to 95%, with an average of 68%.
 
-<img width="863" alt="图片" src="https://user-images.githubusercontent.com/43129850/146643292-5eea23d8-c97e-4fc8-bacb-67d97a3f60bc.gif">
-
+<p align="center">
+<img width="800" alt="图片" src="https://user-images.githubusercontent.com/43129850/146643292-5eea23d8-c97e-4fc8-bacb-67d97a3f60bc.gif">
+</p>
+  
 Figure 10: Stack distance profile of eon and art.
 
 Now, we would like to discuss why some applications can be sped up and why some applications cannot be sped up.
@@ -484,7 +488,9 @@ This is why applications in group B do not show performance improvement: one typ
 
 ### 5.3. Sensitivity to Cache Parameters
 
-<img width="863" alt="图片" src="https://user-images.githubusercontent.com/43129850/146643303-5cd27189-641c-41ec-a7d7-ae24d024fb60.gif">
+<p align="center">
+<img width="400" alt="图片" src="https://user-images.githubusercontent.com/43129850/146643303-5cd27189-641c-41ec-a7d7-ae24d024fb60.gif">
+</p>
 
 Table 4: Minimum, Average, and Maximum Speedup of AIP for Different L2 Cache Configurations for Applications in Group A.
 

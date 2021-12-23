@@ -144,7 +144,7 @@ The hashedPC field is not used for counter bookkeeping, it is merely used to ind
 Since the prediction table has 256 rows, the hashedPC needs to be 8 bits, obtained by XORing all 8-bit parts of the PC of the instruction that misses on the line.
 A similar 8-bit hashing of the block address is used to index a column in the prediction table.
 The second field is the event counter (C).
-The third and fourth fields are the counter thresholds, computed by taking the maximum of event counts in the prior generation (<img src="https://render.githubusercontent.com/render/math?math=maxC_{past}">) and in the current generation (<img src="https://render.githubusercontent.com/render/math?math=maxC_{present}">.
+The third and fourth fields are the counter thresholds, computed by taking the maximum of event counts in the prior generation (<img src="https://render.githubusercontent.com/render/math?math=maxC_{past}">) and in the current generation (<img src="https://render.githubusercontent.com/render/math?math=maxC_{present}">).
 The fifth field is a single confidence bit (conf) that if set, indicates that the block can expire and be considered for replacement.
 If it is not set, the block cannot expire.
 

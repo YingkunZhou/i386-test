@@ -51,7 +51,7 @@ My technique is probably less numerically precise than Henry Wong's technique, b
 
 Note something extremely important and not at all obvious.
 
-In Dougall's code there is a fragment of code called `add_prep()` that zero's out as many of the integer or FP/SIMD registers as feasible.
+In Dougall's code there is a fragment of code called add_prep() that zero's out as many of the integer or FP/SIMD registers as feasible.
 This seems like an optional flourish that might be important for certain specialty measurements (like the size of the physical register file).
 Not so!
 
